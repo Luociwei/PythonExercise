@@ -1,0 +1,328 @@
+# Xavier setting
+stationUnit()
+{
+	return {
+		"Slot-1": 
+		{
+			"identifier" : "Slot-1",
+			"unit_transports" : 
+			[
+				{"url":"uart:///tmp/dev/DUT10", "metadata":{"metaUnit":"1", "virtualport":"xav://169.254.1.32:7801:uart_SoC", "virtualportconfig":""}},
+				{"url":"lockdown://0x14710000", "metadata":{"metaUnit":"1"}}
+			],
+			"userinfo" : {"unitNumber":"1", "locationId":"0x14710000"}
+		},
+		"Slot-2": 
+		{
+			"identifier" : "Slot-2",
+			"unit_transports" : 
+			[
+				{"url":"uart:///tmp/dev/DUT11", "metadata":{"metaUnit":"2", "virtualport":"xav://169.254.1.32:7802:uart_SoC", "virtualportconfig":""}},
+				{"url":"lockdown://0x14720000", "metadata":{"metaUnit":"2"}}
+			],
+			"userinfo" : {"unitNumber":"2", "locationId":"0x14720000"}
+		},
+		"Slot-3": 
+		{
+			"identifier" : "Slot-3",
+			"unit_transports" : 
+			[
+				{"url":"uart:///tmp/dev/DUT12", "metadata":{"metaUnit":"3", "virtualport":"xav://169.254.1.32:7803:uart_SoC", "virtualportconfig":""}},
+				{"url":"lockdown://0x14730000", "metadata":{"metaUnit":"3"}}
+			],
+			"userinfo" : {"unitNumber":"3", "locationId":"0x14730000"}
+		},
+		 "Slot-4": 
+		{
+			"identifier" : "Slot-4",
+			"unit_transports" : 
+			[
+				{"url":"uart:///tmp/dev/DUT13", "metadata":{"metaUnit":"4", "virtualport":"xav://169.254.1.32:7804:uart_SoC", "virtualportconfig":""}},
+				{"url":"lockdown://0x14740000", "metadata":{"metaUnit":"4"}}
+			],
+			"userinfo" : {"unitNumber":"4", "locationId":"0x14740000"}
+		}
+	}
+}
+#
+
+# Called when core is starting your station for the first time (app start)
+app_setup(app)
+{
+	# uart setting
+	stationTopologyUART = 	{
+							"units" : 
+							[
+								{
+									"identifier" : "Slot-1",
+									"unit_transports" : [{"url":"uart:///dev/cu.usbserial-DUT10"},
+															{"url":"lockdown://0x14710000",
+															"metadata":{"metaUnit":"1"}}],
+									"userinfo" : {"unitNumber":"1", "locationId":"0x14710000"}
+								},
+								{
+									"identifier" : "Slot-2",
+									"unit_transports" : [{"url":"uart:///dev/cu.usbserial-DUT11"},
+															{"url":"lockdown://0x14720000",
+															"metadata":{"metaUnit":"2"}}],
+									"userinfo" : {"unitNumber":"2", "locationId":"0x14720000"}
+								},
+								{
+									"identifier" : "Slot-3",
+									"unit_transports" : [{"url":"uart:///dev/cu.usbserial-DUT12"},
+															{"url":"lockdown://0x14730000",
+															"metadata":{"metaUnit":"3"}}],
+									"userinfo" : {"unitNumber":"3", "locationId":"0x14730000"}
+								},
+								{
+									"identifier" : "Slot-4",
+									"unit_transports" : [{"url":"uart:///dev/cu.usbserial-DUT13"},
+															{"url":"lockdown://0x14740000",
+															"metadata":{"metaUnit":"4"}}],
+									"userinfo" : {"unitNumber":"4", "locationId":"0x14740000"}
+								},
+							]
+				    	}
+
+	# Xavier setting
+	stationTopologyXAVIER = 	{
+							"units" : 
+							[
+								stationUnit()["Slot-1"],
+								stationUnit()["Slot-2"],
+								stationUnit()["Slot-3"],
+								stationUnit()["Slot-4"],
+							]
+				    	}
+
+  app.settings = {
+					"station-name" : "SOC ATLAS",
+					"force-fullscreen" : :FALSE:,
+					"test-modes":
+					[
+						"LineBringup"
+					],
+					"custom-test-modes" : 
+					[
+						{
+							# disable process control
+							"name" : "Offline_Mode_POR_RtosRbm",
+							"base-test-mode" : "LineBringup"
+						},
+						{
+							# disable process control
+							"name" : "Offline_Mode_POR_Rtos",
+							"base-test-mode" : "LineBringup"
+						},
+						{
+							# disable process control
+							"name" : "Offline_Mode_POR_Rbm",
+							"base-test-mode" : "LineBringup"
+						},
+						{
+							# disable process control
+							"name" : "Offline_Mode_Restore_RtosRbm_NoDiag",
+							"base-test-mode" : "LineBringup"
+						},
+						{
+							# disable process control
+							"name" : "Offline_Mode_Restore_Rtos_NoDiag",
+							"base-test-mode" : "LineBringup"
+						},
+						{
+							# disable process control
+							"name" : "Offline_Mode_Restore_Rbm_NoDiag",
+							"base-test-mode" : "LineBringup"
+						},
+						{
+							# disable process control
+							"name" : "Offline_Mode_Restore_Experiment",
+							"base-test-mode" : "LineBringup"
+						},
+						{
+							"name" : "Enter DFU",
+							"base-test-mode" : "LineBringup"
+						}
+					],
+					# "start-button" : stationTopologyXAVIER,
+					"station-topology" : stationTopologyXAVIER
+				 }
+}
+
+# launches plugins visible to all units and groups
+station_setup()
+{
+	Atlas.Log.info("Setting up Atlas SOC-TEST Station")
+	Atlas.launch_plugin("AtlasPluginLibrary", "PListReader")
+	Atlas.launch_plugin("AtlasPluginLibrary", "StationUtils")
+	Atlas.launch_plugin("FixtureBundle", "CommonFixture", "Fixture",
+						{"TopologyConfig" : "A", "maxConnectedFixtures": 1,
+						"maxSlotsperFixture" : 4,
+						# "bypassAutoDetect":1
+						})
+
+	Atlas.launch_plugin("AtlasPluginLibrary", "StationReport")
+
+
+	# MicroTest USB
+	Atlas.launch_plugin("USBMonitorBundle", "USBMonitor", "MT SOC_USB", 
+						{ "idVendor" : 0x2d23, "idProduct" : 0x1004,
+						"popupsEnabled" : :TRUE:, "popupMessage" : "MicroTest USB Cable" })
+}
+
+configureVirtualPortBundle(unit)
+{
+	# slot_number will be Slot-1/Slot-2/Slot-3/Slot-4
+	slot_number = unit.unit_identifier
+
+
+	stationTopology =	{	
+							"Slot-1": 
+							{
+							 	"Slot-1" : 
+							 	{
+							 		"xav":"169.254.1.32:7801:uart_SoC", "uart":"/tmp/dev/DUT10", "config": "{\"datapath_endpoint\":8801}"
+							 	}
+							},
+							"Slot-2": 
+							{
+							 	"Slot-2" : 
+							 	{
+							 		"xav":"169.254.1.32:7802:uart_SoC", "uart":"/tmp/dev/DUT11", "config": "{\"datapath_endpoint\":8802}"
+							 			
+							 	}
+							},
+							"Slot-3": 
+							{
+							 	"Slot-3" : 
+							 	{
+							 		"xav":"169.254.1.32:7803:uart_SoC", "uart":"/tmp/dev/DUT12", "config": "{\"datapath_endpoint\":8803}"
+							 	}
+							},
+							"Slot-4": 
+							{
+							 	"Slot-4" : 
+							 	{
+							 		"xav":"169.254.1.32:7804:uart_SoC", "uart":"/tmp/dev/DUT13", "config": "{\"datapath_endpoint\":8804}"
+							 	}
+							}
+						}
+
+	Atlas.launch_plugin(unit, "VirtualPortBundle", "VirtualPort",
+		{ "group_id" : slot_number,
+		  "unit_id" : slot_number,
+		  "topology" : stationTopology })
+}
+
+# Called only when core receives new unit
+unit_setup(unit)
+{
+	Atlas.Log.info(unit)
+	Atlas.set_sequence(unit, "Main.rush", "Test.rush", "Function.rush")
+
+	# support Xavier
+	configureVirtualPortBundle(unit)
+
+	# DCSD needs .pr and restore tool support
+	# and /vault/data_collection/test_station_config/gh_station_info.json
+    # 0 means success
+    checkFFDCSD = System.system("ls /Library/PrivateFrameworks/FFDCSD.framework")
+    if (checkFFDCSD == 0)
+    {
+      	Atlas.launch_plugin(unit, "DCSDPlugin", "DCSD")
+    }
+    else
+    {
+      	Atlas.Log.info("FFDCSD.framework not found, skipping DCSD Plugin")
+    }
+
+	Atlas.launch_plugin(unit, "AtlasPluginLibrary", "Usbfs")
+	DutParameter =  {"ANYTHING" : {"ignore": True},
+					 "isPass": {"overrideWithSequenceName": True,
+					 "limitPassPattern": "PASS"}}
+	tmpDictionary = {}
+
+	# -----Read testLimit.csv file --------#
+	csv_path = Atlas.path_for_resource("limits/SOC_LIMITS.csv")
+	Atlas.Log.info("Using CSV file: " + csv_path)
+	csv = BasicCSV.load(csv_path)
+	header = ["group", "name", "units", "upperLimit", "lowerLimit",
+			  "relaxedUpperLimit", "relaxedLowerLimit", "limitPassPattern",
+			  "limitTruePattern", "HexValue", "Attribute"]
+
+	for index in range(1, size(csv))
+	{
+		line = csv[index]
+
+		if size(line) <> size(header)
+		{
+			raise exception("Expected line in CSV to have "
+							+ stringify(size(header)) + " items but it had "
+							+ stringify(size(line)) + " (line "
+							+ stringify(index) + ")")
+		}
+
+		if line[0] <> Nil && line[0] <> ""
+		{
+			keyName = line[1]
+			limitPassPattern = line[7]
+			limitTruePattern = line[8]
+			HexValueFlag = line[9]
+			AttributeFlag = line[10]
+			tmpDictionary2 = {}
+
+			if (HexValueFlag == 1)
+			{
+				tmpDictionary2 = tmpDictionary2 + {"isHexValue": True}
+			}
+
+			if (AttributeFlag == 1)
+			{
+				tmpDictionary2 = tmpDictionary2 + {"isAttribute": True}
+			}
+
+			if (limitPassPattern != Nil && limitPassPattern != "")
+			{
+				 tmpDictionary2 = tmpDictionary2 + {"limitPassPattern": limitPassPattern}
+			}
+
+			if (limitTruePattern != Nil && limitTruePattern != "")
+			{
+				tmpDictionary2 = tmpDictionary2 + {"limitTruePattern": limitTruePattern}
+			}
+
+			tmpDictionary[keyName] = tmpDictionary2
+		}
+	}
+	# -----Finish Reading testLimit.csv file --------#
+
+	DutParameter = DutParameter + tmpDictionary
+	DutLimitParameter = {"limits" : DutParameter}
+
+	ParseFilePath = {"parseFiles" : 
+						[
+							"~/Library/Atlas/Resources/parseDefinitions/EFICommand.md",
+							"~/Library/Atlas/Resources/parseDefinitions/RBMCommand.md",
+							"~/Library/Atlas/Resources/parseDefinitions/RTOSCommand.md"
+				  		]
+			  		}
+
+	tempString = stringify(DutLimitParameter + ParseFilePath)
+
+	Atlas.Log.info ("Dut Parameters including csv: " + tempString)
+	Atlas.launch_plugin(unit, "AtlasPluginLibrary", "Dut", DutLimitParameter
+						+ ParseFilePath)
+
+	# TestProcess/ProcessControl requires IP Library in /usr/local/lib/
+	Atlas.launch_plugin(unit, "AtlasPluginLibrary", "TestProcess")
+	Atlas.launch_plugin(unit, "AtlasPluginLibrary", "ProcessControl", {
+			"snSource" : "MLBSN",
+			#"overrideOverallStartTime": 0,
+		    #"overrideOverallEndTime": 0,
+			"testTimeParam": 1
+		  }
+	 )
+	Atlas.launch_plugin(unit, "TestPlugin", "TestPlugin", "runTest")
+	Atlas.launch_plugin(unit, "UtilityPlugin", "Utilities")
+}
+

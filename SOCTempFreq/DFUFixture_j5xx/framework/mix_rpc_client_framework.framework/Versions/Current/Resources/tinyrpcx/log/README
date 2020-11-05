@@ -1,0 +1,7 @@
+rpc log folder
+
+rpc_default.log:
+    All logs that is not from rpc server itself, like driver.
+
+rpc_server_endpoint_timestamp:
+    log file for specific RPC server instance.

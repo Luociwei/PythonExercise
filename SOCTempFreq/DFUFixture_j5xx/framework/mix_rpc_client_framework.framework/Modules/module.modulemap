@@ -1,0 +1,6 @@
+framework module mix_rpc_client_framework{
+  umbrella header "mix_rpc_client_framework.h"
+
+  export *
+  module * { export * }
+}

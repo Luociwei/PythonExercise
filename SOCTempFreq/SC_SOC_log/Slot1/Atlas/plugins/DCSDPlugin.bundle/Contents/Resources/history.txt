@@ -1,0 +1,101 @@
+27.1.4 - 04/11/2018
+<rdar://problem/36560238> [DCSD Plugin] Ambiguous QCR Restore Failure Messages
+
+27.1.3 - 11/02/2017
+<rdar://problem/35252616> [C3]X988 Burnin-Atlas1.1.1-DFU restore-ERROR-"NO FAILURE MESSAGE PROVIDED( DCSD, restore )
+
+27.1.2 - 10/30/2017
+<rdar://problem/35090331> X988 PVT-Burnin Station-Atlas1.1.0 DOE-Issue-Can't load DCSDPlugin.bundle
+
+27.1.1 - 07/17/2017
+<rdar://problem/31421791> "FFDCSDProcessLogCollection.log" is not in AtlasLogs folder but in Atlas working directory folder.
+
+27.1.0 - 07/07/17
+<rdar://problem/33350672> DCSDPlugin does not support iBridge devices
+
+27.0.5 - 04/28/17
+<rdar://problem/31882583> DCSDPlugin Crash: [DCSDPlugin deviceRestoreStatusChanged:context:] + 241
+
+27.0.4 - 03/30/17
+<rdar://problem/31028581> Atlas DCSDPlugin.bundle restore command impact shop floor process flow
+
+27.0.3 - 03/24/17
+<rdar://problem/31233987> DCSDPlugin - Need a message to telling user the log folder is not found when upload log
+
+27.0.2 - 03/09/17
+<rdar://problem/30918854> J137 SMT P1 Dry Run:DCSD.restore failure C027033001CHKWKQ1B
+
+27.0.1 - 02/22/17
+<rdar://problem/30563149> DCSDPlugIn to use <Major>.<Minor>.<Fix> for versioning
+
+1.1.20 - 02/14/17
+<rdar://problem/29314858> DCSDPlugin has dependency on MobileDevice frameworks
+
+1.1.19 - 01/04/16
+<rdar://problem/29435766> [DCSDPlugin] Use CFS to query device attribute
+
+1.1.18 - 01/03/17
+<rdar://problem/28756566> PDCA Individual Upload
+
+1.1.17 - 12/20/16
+<rdar://problem/29565666> [J105a - P2] NonUI-Restore station need a way to discover AppleTV UART name
+<rdar://problem/29494810> [J105a DCSDPlugin] launchCommand should be separated from AppleTVRemote plugin
+<rdar://problem/29690212> J105a Proto2 Dry-run Non-UI Station:[Unit no log test logcollection function shouldn't fail]
+
+1.1.16 - 12/19/2016
+<rdar://problem/29744972> [J105a.P2] There is a race condition in LEDIndicator plugin
+
+1.1.15 - 12/19/2016
+<rdar://problem/29744212> [DCSDPlugin] The function to get USBLocation should be case insensitive
+
+1.1.14 - 12/19/2016
+<rdar://problem/29568499> [J105a.P2] Do not error out if the station is not included in Attribextra.plist
+
+1.1.13 - 12/12/2016
+<rdar://problem/29628685> [J105a.P2] DCSD is reporting error while the device attributes are successfully read
+
+1.1.12 - 12/09/2016
+<rdar://problem/29599228> [J105a.P2] DCSD - Add command for readDeviceInfoViaFactoryRamDisk
+
+1.1.11 - 12/08/16
+<rdar://problem/29546683> [J105a.P2] SWDL: Failed to clear restore result
+
+1.1.10 - 12/05/16
+<rdar://problem/29477708> [J105a.P2] SWDL - DCSD Plugin exit unexpectedly when device is connected in Recover mode
+
+1.1.9 - 12/02/2016
+<rdar://problem/29073714> [J105a] remote pairing - Add support in DCSD PlugIn and rush
+<rdar://problem/29449693> DCSD plugin crashes with AtlasPluginLibrary’s Automatic DutDetection method
+
+1.1.8 - 11/30/2016
+<rdar://problem/29361778> [DCSDPlugin] Add support for DiagsOverUSB
+
+1.1.7 - 11/29/2016
+<rdar://problem/29314858> DCSDPlugin has dependency on MobileDevice frameworks
+
+1.1.6 - 11/17/16
+<rdar://problem/29318375> [J105a] Gatekeeper - Add support in DCSD PlugIn
+
+1.1.5 - 11/15/2016
+<rdar://problem/29272890> [J105a] remote pairing - Add support in DCSD PlugIn and rush
+- moved to new plugin architecture (removed plist)
+
+1.1.4 - 11/04/2016
+<rdar://problem/29055324> [J105a] LogCollection - Add support in FFDCSD and DCSD PlugIn
+<rdar://problem/29047868> DCSD restore plugin need to support file url from pr doc
+
+1.1.3 - 10/04/2016
+<rdar://problem/28601516> New command in DCSDPlugIn to generate random MAC address for J105a DFU station
+
+1.1.2 - 09/21/2016
+<rdar://problem/28394236> Remove OpenSSL from DCSDPlugIn
+
+2/9/2016
+<rdar://problem/24528293> add a flag to disable filtering of the attributes in DCSD upload
+
+1.1 - 02/25/2016
+<rdar://problem/24828083> Atlas DCSD plugin Disable signing for AppleConnect
+
+06/21/2016
+<rdar://problem/26900512> J207: Add bootFile support in FFDCSD
+

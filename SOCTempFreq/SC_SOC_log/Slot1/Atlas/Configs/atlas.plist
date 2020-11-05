@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>asynchronous</key>
+	<true/>
+	<key>identifier</key>
+	<string>atlas</string>
+	<key>min_log_level</key>
+	<string>Info</string>
+	<key>trim_log_message</key>
+	<false/>
+</dict>
+</plist>

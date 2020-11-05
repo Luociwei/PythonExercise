@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# fig = plt.figure()
+# fig.suptitle('no axes on this figure')
+#
+# fig,ax_lst = plt.subplots(2,2)
+# plt.show()
+
+# x = np.linspace(-2, 6, 50)
+# # print('sss: ',x)
+# # y1 = x + 3      # 曲线 y1
+# # y2 = 3 - x      # 曲线 y2
+# # plt.figure()    # 定义一个图像窗口
+# # plt.plot(x, y1) # 绘制曲线 y1
+# # plt.plot(x, y2) # 绘制曲线 y2
+# # plt.show()
+
+# 创建一个点数为 8 x 6 的窗口, 并设置分辨率为 80像素/每英寸
+plt.figure(figsize=(8, 6), dpi=80)
+
+# 再创建一个规格为 1 x 1 的子图
+plt.subplot(111)
+
+x = np.linspace(-2, 6, 50)
+print(x)
+y1 = x + 3        # 曲线 y1
+y2 = 3 - x        # 曲线 y2
+
+# 设置横轴的上下限
+plt.xlim(-1, 6)
+# 设置纵轴的上下限
+plt.ylim(-2, 10)
+
+plt.xlabel("x")
+plt.ylabel("y")
+# 设置横轴精准刻度
+plt.xticks([-1, 0, 1, 2, 3, 4, 5, 6])
+# 设置纵轴精准刻度
+plt.yticks([-2, 0, 2, 4, 6, 8, 10])
+# # 设置横轴精准刻度
+# plt.xticks([-1, 0, 1, 2, 3, 4, 5, 6],
+#            ["-1m", "0m", "1m", "2m", "3m", "4m", "5m", "6m"])
+# # 设置纵轴精准刻度
+# plt.yticks([-2, 0, 2, 4, 6, 8, 10],
+#            ["-2m", "0m", "2m", "4m", "6m", "8m", "10m"])
+
+
+# 绘制颜色为蓝色、宽度为 1 像素的连续曲线 y1
+plt.plot(x, y1, color="blue", linewidth=1.0, linestyle="-", label="y1")
+# 绘制散点(3, 6)
+plt.scatter([3], [6], s=30, color="blue")      # s 为点的 size
+# 对(3, 6)做标注
+plt.annotate("(3, 6)",
+             xy=(3.3, 5.5),       # 在(3.3, 5.5)上做标注
+             fontsize=16,         # 设置字体大小为 16
+             xycoords='data')  # xycoords='data' 是说基于数据的值来选位置
+
+# 绘制颜色为紫色、宽度为 2 像素的不连续曲线 y2
+plt.plot(x, y2, color="#800080", linewidth=2.0, linestyle="--", label="y2")
+# 绘制散点(3, 0)
+plt.scatter([3], [0], s=50, color="#800080")
+# 对(3, 0)做标注
+plt.annotate("(3, 0)",
+             xy=(3.3, 0),            # 在(3.3, 0)上做标注
+             fontsize=16,          # 设置字体大小为 16
+             xycoords='data')    # xycoords='data' 是说基于数据的值来选位置
+
+plt.show()

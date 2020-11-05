@@ -1,0 +1,182 @@
+ENABLE,PDCAPREFIX,PDCANAME,DUTCOMMAND,TIMEOUT,PLUGIN,ATLASCOMMAND,MDPARSER,REGEX,EXPECT,PARAMETER,LIMITGROUP,RETESTPOLICY,HANGTIMEOUT,BGCT,COF
+1,3001,SET-RESET-MLB,FIXTURESIGNAL_BOOT_RBM,60,Rush,restore,0,,-> <-,RBM,xVT,AAB,,,1
+1,3002,DUMP-NOM-PCORE-STATE,phigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3003,DUMP-NOM-ECORE-STATE,ehigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3004,DUMP-NOM-TEMP,.temps,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3005,DUMP-NOM-PDVFM,calc-pdvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3006,DUMP-NOM-PDVFM,calc-edvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3007,SET-NOM-PA2DDR,true to dumppa2ddr?,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3008,DUMP-NOM-PDVFM,show dvfm,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3009,DUMP-NOM-PMU,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3010,SET-NOM-VDDR1V1,set pmu -vdd2=1060,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3011,DUMP-NOM-PMU-2,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3012,RBM-NOM,"bfrbm -mrbm ff -jrbm ff -jrbm1 ff -ascs 1 -smc 0 ; --symo -f avpattwr-all -eapsc ehigh-state -papsc phigh-state -socperf 4 -dcsperf 6 --templog --nohots --cr -tout 300 -pq 1,.temps",360,Dut,sendCommand,0,,TEST_PASSED,RBM,xVT,A -> FA,60,x,1
+1,3013,DUMP-NOM-TEMPLOG,.templog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3014,DUMP-NOM-L2-DECODE,.rfl,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3015,DUMP-NOM-MAX-TEMP,.sns-maxtemp,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3016,DUMP-NOM-TEMP-EVENT,.tel,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3017,DUMP-NOM-LOG,.rbmlog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3018,DUMP-NOM-APSC-LOG,.apsc_log,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3019,DUMP-NOM-MTQ,.mtq,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3020,DUMP-NOM-RBMS,.rbm_s,5,runTest,runRBM,0,,0,RBM,xVT,A -> FA,,,1
+1,3021,Reset MLB,FIXTURESIGNAL_BOOT_RBM,60,Rush,restore,0,,-> <-,RBM,xVT,AAB,,,1
+1,3022,DUMP-BBQ-PCORE-STATE,phigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3023,DUMP-BBQ-ECORE-STATE,ehigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3024,DUMP-BBQ-TEMP,.temps,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3025,DUMP-BBQ-PDVFM,calc-pdvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3026,DUMP-BBQ-PDVFM,calc-edvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3027,SET-BBQ-PA2DDR,true to dumppa2ddr?,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3028,DUMP-BBQ-PDVFM,show dvfm,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3029,DUMP-BBQ-PMU,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3030,SET-BBQ-VDDR1V1,set pmu -vdd2=1060,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3031,DUMP-BBQ-PMU-2,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3032,RBM-BBQ,"80000000 04000000 00800000 vrbmscat16k -f avpattwr-all -papsc phigh-state -eapsc ehigh-state -dcsperf 6 -socperf 4 -m rSyimCore_PEMove_BBQ_H13 -mcmp rSyimCore_PEMemCmp_BBQV8_H13 --templog --nohots --cr -tout 300 -pq 1,.temps",360,Dut,sendCommand,0,,TEST_PASSED,RBM,xVT,A -> FA,60,x,1
+1,3033,DUMP-BBQ-TEMPLOG,.templog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3034,DUMP-BBQ-L2-DECODE,.rfl,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3035,DUMP-BBQ-MAX-TEMP,.sns-maxtemp,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3036,DUMP-BBQ-TEMP-EVENT,.tel,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3037,DUMP-BBQ-LOG,.rbmlog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3038,DUMP-BBQ-APSC-LOG,.apsc_log,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3039,DUMP-BBQ-MTQ,.mtq,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3040,DUMP-BBQ-RBMS,.rbm_s,5,runTest,runRBM,0,,0,RBM,xVT,A -> FA,,,1
+1,3041,Reset MLB,FIXTURESIGNAL_BOOT_RBM,60,Rush,restore,0,,-> <-,RBM,xVT,AAB,,,1
+1,3042,DUMP-PV1-PCORE-PCORE-STATE,phigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3043,DUMP-PV1-PCORE-ECORE-STATE,ehigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3044,DUMP-PV1-PCORE-TEMP,.temps,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3045,DUMP-PV1-PCORE-PDVFM,calc-pdvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3046,DUMP-PV1-PCORE-PDVFM,calc-edvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3047,SET-PV1-PCORE-PA2DDR,true to dumppa2ddr?,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3048,DUMP-PV1-PCORE-PDVFM,show dvfm,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3049,DUMP-PV1-PCORE-PMU,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3050,SET-PV1-PCORE-VDDR1V1,set pmu -vdd2=1060,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3051,DUMP-PV1-PCORE-PMU-2,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3052,RBM-PV1-PCORE,"bfrbm ; -f avpattwr-all -papsc phigh-state -eapsc ehigh-state -dcsperf 6 -socperf 4 -m rSyimCoremove_PV1_H13 -mcmp RndMCmpPV1LightningQ -msk 0xf0 core4 --templog --nohots --cr -tout 300 -pq 1,.temps",360,Dut,sendCommand,0,,TEST_PASSED,RBM,xVT,A -> FA,60,x,1
+1,3053,DUMP-PV1-PCORE-TEMPLOG,.templog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3054,DUMP-PV1-PCORE-L2-DECODE,.rfl,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3055,DUMP-PV1-PCORE-MAX-TEMP,.sns-maxtemp,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3056,DUMP-PV1-PCORE-TEMP-EVENT,.tel,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3057,DUMP-PV1-PCORE-LOG,.rbmlog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3058,DUMP-PV1-PCORE-APSC-LOG,.apsc_log,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3059,DUMP-PV1-PCORE-MTQ,.mtq,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3060,DUMP-PV1-PCORE-RBMS,.rbm_s,5,runTest,runRBM,0,,0,RBM,xVT,A -> FA,,,1
+1,3061,Reset MLB,FIXTURESIGNAL_BOOT_RBM,60,Rush,restore,0,,-> <-,RBM,xVT,AAB,,,1
+1,3062,DUMP-PGT-PCORE-STATE,phigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3063,DUMP-PGT-ECORE-STATE,ehigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3064,DUMP-PGT-TEMP,.temps,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3065,DUMP-PGT-PDVFM,calc-pdvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3066,DUMP-PGT-PDVFM,calc-edvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3067,SET-PGT-PA2DDR,true to dumppa2ddr?,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3068,DUMP-PGT-PDVFM,show dvfm,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3069,DUMP-PGT-PMU,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3070,SET-PGT-VDDR1V1,set pmu -vdd2=1060,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3071,DUMP-PGT-PMU-2,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3072,RBM-PGT,"bfrbm -mdma 1 -jdma 1 -jdma1 1 -ascs 1 -smc 0 ; --syimo -tslw 10,1000,-1,1000 -f avpattwr-all -rapscep 1,0x12,0x7c,pdvfm-mask -dcsperf 6 -socperf 4 -pgt -506 -SWAP --nohots --cr -tout 300 -pq 1,.temps",360,Dut,sendCommand,0,,TEST_PASSED,RBM,xVT,A -> FA,60,x,1
+1,3073,DUMP-PGT-TEMPLOG,.templog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3074,DUMP-PGT-L2-DECODE,.rfl,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3075,DUMP-PGT-MAX-TEMP,.sns-maxtemp,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3076,DUMP-PGT-TEMP-EVENT,.tel,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3077,DUMP-PGT-LOG,.rbmlog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3078,DUMP-PGT-APSC-LOG,.apsc_log,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3079,DUMP-PGT-MTQ,.mtq,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3080,DUMP-PGT-RBMS,.rbm_s,5,runTest,runRBM,0,,0,RBM,xVT,A -> FA,,,1
+1,3081,Reset MLB,FIXTURESIGNAL_BOOT_RBM,60,Rush,restore,0,,-> <-,RBM,xVT,AAB,,,1
+1,3082,DUMP-DVFM-PCORE-STATE,phigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3083,DUMP-DVFM-ECORE-STATE,ehigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3084,DUMP-DVFM-TEMP,.temps,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3085,DUMP-DVFM-PDVFM,calc-pdvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3086,DUMP-DVFM-PDVFM,calc-edvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3087,SET-DVFM-PA2DDR,true to dumppa2ddr?,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3088,DUMP-DVFM-PDVFM,show dvfm,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3089,DUMP-DVFM-PMU,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3090,SET-DVFM-VDDR1V1,set pmu -vdd2=1060,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3091,DUMP-DVFM-PMU-2,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3092,RBM-DVFM,"bfrbm -mrbm ff -jrbm ff -jrbm1 ff -ascs 1 -smc 0 ; --syimo -f avpattwr-all -tslw 10,1000,-1,1000 -rapscep 1,0x12,edvfm-mask,pdvfm-mask -rsoc 1,0x18 -rdcs 1,4 --templog --nohots --cr -tout 300 -pq 1,.temps",360,Dut,sendCommand,0,,TEST_PASSED,RBM,xVT,A -> FA,60,x,1
+1,3093,DUMP-DVFM-TEMPLOG,.templog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3094,DUMP-DVFM-L2-DECODE,.rfl,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3095,DUMP-DVFM-MAX-TEMP,.sns-maxtemp,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3096,DUMP-DVFM-TEMP-EVENT,.tel,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3097,DUMP-DVFM-LOG,.rbmlog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3098,DUMP-DVFM-APSC-LOG,.apsc_log,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3099,DUMP-DVFM-MTQ,.mtq,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3100,DUMP-DVFM-RBMS,.rbm_s,5,runTest,runRBM,0,,0,RBM,xVT,A -> FA,,,1
+1,3101,Reset MLB,FIXTURESIGNAL_BOOT_RBM,60,Rush,restore,0,,-> <-,RBM,xVT,AAB,,,1
+1,3102,DUMP-NOM-UC-PCORE-STATE,phigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3103,DUMP-NOM-UC-ECORE-STATE,ehigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3104,DUMP-NOM-UC-TEMP,.temps,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3105,DUMP-NOM-UC-PNOM-UC,calc-pdvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3106,DUMP-NOM-UC-PNOM-UC,calc-edvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3107,SET-NOM-UC-PA2DDR,true to dumppa2ddr?,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3108,DUMP-NOM-UC-PNOM-UC,show dvfm,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3109,DUMP-NOM-UC-PMU,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3110,SET-NOM-UC-VDDR1V1,set pmu -vdd2=1060,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3111,DUMP-NOM-UC-PMU-2,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3112,RBM-NOM-UC,"bfrbm -mrbm ff -jrbm ff -jrbm1 ff -ascs 1 -16kucuc_ucwb -smc 0 ; --symoucuc -eapsc ehigh-state -papsc phigh-state -socperf 4 -dcsperf 6 --templog --nohots --cr -tout 300 -pq 1,.temps",360,Dut,sendCommand,0,,TEST_PASSED,RBM,xVT,A -> FA,60,x,1
+1,3113,DUMP-NOM-UC-TEMPLOG,.templog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3114,DUMP-NOM-UC-L2-DECODE,.rfl,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3115,DUMP-NOM-UC-MAX-TEMP,.sns-maxtemp,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3116,DUMP-NOM-UC-TEMP-EVENT,.tel,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3117,DUMP-NOM-UC-LOG,.rbmlog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3118,DUMP-NOM-UC-APSC-LOG,.apsc_log,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3119,DUMP-NOM-UC-MTQ,.mtq,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3120,DUMP-NOM-UC-RBMS,.rbm_s,5,runTest,runRBM,0,,0,RBM,xVT,A -> FA,,,1
+1,3121,Reset MLB,FIXTURESIGNAL_BOOT_RBM,60,Rush,restore,0,,-> <-,RBM,xVT,AAB,,,1
+1,3122,DUMP-AMX-PCORE-STATE,phigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3123,DUMP-AMX-ECORE-STATE,ehigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3124,DUMP-AMX-TEMP,.temps,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3125,DUMP-AMX-PAMX,calc-pdvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3126,DUMP-AMX-PAMX,calc-edvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3127,SET-AMX-PA2DDR,true to dumppa2ddr?,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3128,DUMP-AMX-PAMX,show dvfm,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3129,DUMP-AMX-PMU,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3130,SET-AMX-VDDR1V1,set pmu -vdd2=1060,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3131,DUMP-AMX-PMU-2,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3132,RBM-AMX,"qscatrbm -f avpattwr-all -papsc phigh-state -eapsc ehigh-state -socperf 4 -dcsperf 6 -m RndAMXmv -mcmp RndMCmpAMXQ -msk -1 --templog --nohots --cr -tout 300 -pq 1,.temps",360,Dut,sendCommand,0,,TEST_PASSED,RBM,xVT,A -> FA,60,x,1
+1,3133,DUMP-AMX-TEMPLOG,.templog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3134,DUMP-AMX-L2-DECODE,.rfl,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3135,DUMP-AMX-MAX-TEMP,.sns-maxtemp,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3136,DUMP-AMX-TEMP-EVENT,.tel,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3137,DUMP-AMX-LOG,.rbmlog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3138,DUMP-AMX-APSC-LOG,.apsc_log,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3139,DUMP-AMX-MTQ,.mtq,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3140,DUMP-AMX-RBMS,.rbm_s,5,runTest,runRBM,0,,0,RBM,xVT,A -> FA,,,1
+1,3141,Reset MLB,FIXTURESIGNAL_BOOT_RBM,60,Rush,restore,0,,-> <-,RBM,xVT,AAB,,,1
+1,3142,DUMP-AMX-PV1-PCORE-STATE,phigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3143,DUMP-AMX-PV1-ECORE-STATE,ehigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3144,DUMP-AMX-PV1-TEMP,.temps,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3145,DUMP-AMX-PV1-PAMX-PV1,calc-pdvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3146,DUMP-AMX-PV1-PAMX-PV1,calc-edvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3147,SET-AMX-PV1-PA2DDR,true to dumppa2ddr?,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3148,DUMP-AMX-PV1-PAMX-PV1,show dvfm,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3149,DUMP-AMX-PV1-PMU,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3150,SET-AMX-PV1-VDDR1V1,set pmu -vdd2=1060,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3151,DUMP-AMX-PV1-PMU-2,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3152,RBM-AMX-PV1,"bfrbm ; -f avpattwr-all -papsc phigh-state -eapsc ehigh-state -dcsperf 6 -socperf 4 -m SymCoreMove_PV1AMXonlyH13 -mcmp SymCoreMCmp_PV1AMXfma16_X1_vs -msk -f0 core4 --templog --nohots --cr -tout 300 -pq 1,.temps",360,Dut,sendCommand,0,,TEST_PASSED,RBM,xVT,A -> FA,60,x,1
+1,3153,DUMP-AMX-PV1-TEMPLOG,.templog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3154,DUMP-AMX-PV1-L2-DECODE,.rfl,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3155,DUMP-AMX-PV1-MAX-TEMP,.sns-maxtemp,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3156,DUMP-AMX-PV1-TEMP-EVENT,.tel,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3157,DUMP-AMX-PV1-LOG,.rbmlog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3158,DUMP-AMX-PV1-APSC-LOG,.apsc_log,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3159,DUMP-AMX-PV1-MTQ,.mtq,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3160,DUMP-AMX-PV1-RBMS,.rbm_s,5,runTest,runRBM,0,,0,RBM,xVT,A -> FA,,,1
+1,3161,Reset MLB,FIXTURESIGNAL_BOOT_RBM,60,Rush,restore,0,,-> <-,RBM,xVT,AAB,,,1
+1,3162,FIXTURESIGNAL_SETFANSPEED_100,FIXTURESIGNAL_SETFANSPEED_100,60,Rush,setfanspeed,0,,,,xVT,AAB,,,1
+1,3163,DUMP-ROW-HAMMER-PCORE-STATE,phigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3164,DUMP-ROW-HAMMER-ECORE-STATE,ehigh-state . cr,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3165,DUMP-ROW-HAMMER-TEMP,.temps,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3166,DUMP-ROW-HAMMER-PROW-HAMMER,calc-pdvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3167,DUMP-ROW-HAMMER-PROW-HAMMER,calc-edvfms,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3168,SET-ROW-HAMMER-PA2DDR,true to dumppa2ddr?,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3169,DUMP-ROW-HAMMER-PROW-HAMMER,show dvfm,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3170,DUMP-ROW-HAMMER-PMU,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3171,SET-ROW-HAMMER-VDDR1V1,set pmu -vdd2=1060,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3172,DUMP-ROW-HAMMER-PMU-2,show pmu,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3173,RBM-ROW-HAMMER,"core4 qrbm -m -1 -f -1 -mcmp MCmpRowHammer4RBM -papsc phigh-state --templog --nohots --cr -tout 300 -pq 1,.temps",360,Dut,sendCommand,0,,TEST_PASSED,RBM,xVT,A -> FA,60,x,1
+1,3174,DUMP-ROW-HAMMER-TEMPLOG,.templog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3175,DUMP-ROW-HAMMER-L2-DECODE,.rfl,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3176,DUMP-ROW-HAMMER-MAX-TEMP,.sns-maxtemp,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3177,DUMP-ROW-HAMMER-TEMP-EVENT,.tel,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3178,DUMP-ROW-HAMMER-LOG,.rbmlog,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3179,DUMP-ROW-HAMMER-APSC-LOG,.apsc_log,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3180,DUMP-ROW-HAMMER-MTQ,.mtq,5,Dut,sendCommand,1,,0,RBM,xVT,A -> FA,,,1
+1,3181,DUMP-ROW-HAMMER-RBMS,.rbm_s,5,runTest,runRBM,0,,0,RBM,xVT,A -> FA,,,1

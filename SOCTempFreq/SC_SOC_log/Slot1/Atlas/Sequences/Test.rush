@@ -1,0 +1,779 @@
+def do_Test()
+{
+	# check Bin1/BinX.
+	Globals.csvRTOSEnterRTOS = "ENTER_RTOS.csv"
+	runCSVTestPlanTimeMeasurement(Globals.csvRTOSEnterRTOS)
+
+	Globals.fuseConfig = Atlas.call_plugin("Dut", "sendCommand", {"parseCommand": "fuse config", "timeout": 60, "testname": "fuse config"})
+	Atlas.Log.info("Fuse Config: ", Globals.fuseConfig)
+	Globals.Product_ID = numerify(Globals.fuseConfig["Product_ID"])
+
+	# Bin1
+	if (Globals.Product_ID == 0)
+	{
+		Atlas.Log.info("Bin1 unit.")
+	}
+	# BinX
+	else
+	{
+		Atlas.Log.info("BinX unit.")
+	}
+	#
+
+		if(Globals.testRtos) {
+		runCSVTestPlanTimeMeasurement("SET_FAN_SPEED_100.csv")
+		# D06
+		Globals.csvRTOSTestPlan = "ATLAS_TP0v0.9.1.3-ENG_RTOS_D06.csv"
+		# if (numerify(Globals.socPDict["SECURE_MODE"]) <> 0)
+		# {
+		# 	# D09/D12
+		# 	Globals.csvRTOSTestPlan = "ATLAS_TP0v4-ENG_RTOS_D09D12.csv"
+		# }
+		runCSVTestPlanTimeMeasurement(Globals.csvRTOSTestPlan)
+	}
+	if(Globals.testRbm) {
+		runCSVTestPlanTimeMeasurement("SET_FAN_SPEED_0.csv")
+		# D06 and D09/D12 is same TP
+		Globals.csvRBMTestPlan = "ATLAS_TP0v0.9.1.3-ENG_RBM.csv"
+		runCSVTestPlanTimeMeasurement(Globals.csvRBMTestPlan)
+	}
+}
+
+# this function will measure how long took to execute and upload to PDCA.
+# it does not care much exception case since it means failure.
+runCSVTestPlanTimeMeasurement(csvLocation)
+{
+	csvStartTime = numerify(System.now())
+	runCSVTestPlan(csvLocation)
+	csvEndTime = numerify(System.now())
+	# Do not use soace, ':', and '.'
+	uploadToPDCA("ExecutionTime_" + csvLocation[0:-4], stringify(csvEndTime - csvStartTime), "sec")
+}
+
+uploadToPDCA(string, value, unit)
+{
+	Atlas.execute_test("Upload to PDCA",[Globals.socTestName], uploadAttribute, string, value, unit)
+}
+
+uploadAttribute(name, value, unit)
+{
+	Atlas.add_device_attribute(name, value)
+	Atlas.create_record([name], numerify(value), unit)
+}
+
+runCSVTestPlan(csvLocation)
+{
+	Atlas.execute_test("Set Hyperion Sequence Display Field",[Globals.socTestName,"Set Hyperion Sequence Display Field"], Atlas.call_plugin, "runTest", "updateUserInfo",
+		{"userinfo":{ "sequence" : csvLocation[:size(csvLocation) - 4] }})
+
+	csv_path = Atlas.path_for_resource(csvLocation)
+	Atlas.Log.info("Using Test Process CSV file: " + csv_path)
+	csv = BasicCSV.load(csv_path)
+	header = ["ENABLE","PDCAPREFIX","TESTNAME","SUBTESTNAME","SUBSUBTESTNAME","DUTCOMMAND","TIMEOUT","PLUGIN","ATLASCOMMAND",
+			  "MDPARSER","REGEX","EXPECT","ENVIRONMENT","LIMITGROUP","RETESTPOLICY","HANGTIMEOUT","BGCT","PARAMETER","COF"]
+
+	if csv[0] <> header
+	{
+		raise exception("Expected CSV header " + header + " got " + csv[0])
+	}
+
+	for index in range(1, size(csv))
+	{
+		line = csv[index]
+
+		if size(line) <> size(header)
+		{
+			raise exception("Expected line in CSV to have " + stringify(size(header))
+							+ " items but it had " + stringify(size(line))
+							+ " (line " + stringify(index) + ")")
+		}
+
+		if (line[0] <> Nil && line[0] <> "")
+		{
+			enabled = numerify(line[0])
+			pdcaPrefix = stringify(tokenize(stringify(line[1]),".")[0])
+			testName = stringify(line[2])
+			subTestName = stringify(line[3])
+			subSubTestName = stringify(line[4])
+			dutCommand = stringify(line[5])
+			timeout = numerify(line[6])
+			plugin = line[7]
+			atlasCommand = stringify(line[8])
+			mdParserFlag = numerify(line[9])
+			regex = line[10]
+			expect = stringify(line[11])
+			environment = line[12]
+			limitGroup = line[13]
+			retestPolicy = stringify(line[14])
+			hangParam = line[15]
+			bgctParam = stringify(line[16])
+			parameter = line[17]
+			test_cof = numerify(line[18])
+			real_timeout = timeout
+			
+			if (test_cof == 1)
+			{
+				Globals.COF = :TRUE:
+			} 
+			else 
+			{
+				Globals.COF = :FALSE:
+			}
+
+			# Removed for Ikura1.13a
+			# subtestname = dutCommand
+
+			# if (subTestName <> Nil)
+			# {
+			# 	if (Strings.tolower(subTestName[0:16]) == "fixture boot to ")
+			# 	{
+			# 		subTestName = tokenize(subTestName, "to ")[1]
+			# 	}
+
+				subtestname = subTestName
+			# }
+
+			# subsubTestName = tokenize(subTestName, " ")
+
+			if (size(subSubTestName) > 1 && Strings.tolower(subSubTestName[1]) == "tmrs" && Globals.ddrVendor <> "Samsung")
+			{
+				Atlas.Log.info(subTestName + "(" + dutCommand + ") not for "+ stringify(Globals.ddrVendor) + ", skipped.")
+				enabled = 0
+			}
+			
+			if (dutCommand == "FIXTURESIGNAL_BOOT_DIAGS" || dutCommand == "FIXTURESIGNAL_BOOT_RTOS" || dutCommand == "FIXTURESIGNAL_BOOT_RBM")
+			{
+				# RBM usually contains multiple BOOT_RBM and following flag gets cleared so that next RBM command can run.
+				Globals.skipNow = :FALSE:
+			}
+
+			if (Globals.skipNow == :TRUE:)
+			{
+				enabled = 0
+			}
+			
+			if (enabled == 1)
+			{
+				description = subTestName
+
+				# Atlas.call_plugin("runTest", "updateUserInfo",
+				# 	   {"userinfo":{ "retestPolicy_" + stringify(Globals.failureCount) : retestPolicy }})
+
+				#Updated for Ikura1.13a
+                if (Strings.toupper(stringify(subSubTestName)) == ":NIL:") {
+                    subSubTestName = "Result"
+                }
+                # NOTE: pdcaPrefix is still supported in DUT plugin but it is currently not being used
+                Globals.plugin_parameters = { "testname": testName, "subtestname": subTestName, "subsubtestname": subSubTestName, "timeout": real_timeout, "retestpolicy": retestPolicy}
+                #end
+
+				if (bgctParam == "x" || bgctParam == "X")
+				{
+					if (environment == "PERTOS")
+					{
+						Globals.frameTerminator = "SEGPE>"
+					}
+					else if (environment == "RBM")
+					{
+						Globals.frameTerminator = " <-"
+					}
+				}
+
+				if (plugin == "Rush")
+				{
+					if (atlasCommand == "Enter DIAGS")
+					{
+						enterDiags(subtestname) onError e -> cof(subtestname, Globals.COF, e)
+					}
+					else if (atlasCommand == "getSerialNumber")
+					{
+						getSerialNumber() onError e -> cof(subtestname, Globals.COF, e)
+					}
+					else if (atlasCommand == "shutdown")
+					{
+						shutdown(subtestname) onError e -> cof(subtestname, Globals.COF, e)
+					}
+					else if (dutCommand == "FIXTURESIGNAL_BOOT_DIAGS")
+					{
+						Globals.env = "DIAGS"
+						enterENV("diags", expect, "", subtestname) onError e -> cof(subtestname, Globals.COF, e)
+					}
+					else if (dutCommand == "FIXTURESIGNAL_BOOT_RTOS")
+					{
+						#Globals.env = "PERTOS"
+						if (Globals.bootPertosFromNand == :TRUE:)
+						{
+							enterENV("rtos", expect, "", subtestname) onError e -> cof(subtestname, Globals.COF, e)
+						}
+						else
+						{
+							restore_dut("PERTOS","SEGPE>", "")  onError e -> cof(subtestname, Globals.COF, e)
+						}
+						Globals.env = "PERTOS"
+						Globals.bincutDict["disableCheck"] = Atlas.execute_test("bincut check", [Globals.socTestName,"bincut check"], Atlas.call_plugin, "runTest", "checkError",
+					   {"expect": "!!! ERROR !!! Domain.*Mode:   (60[7-9]).*NOT expected", "log": Globals.logFile, "byPASS": 1})
+					}
+					else if (dutCommand == "FIXTURESIGNAL_BOOT_RBM")
+					{
+						#Globals.env = "RBM"
+						if (Globals.bootRBMFromNand == :TRUE:)
+						{
+							enterENV("rbm", expect, "", subtestname) onError e -> cof(subtestname, Globals.COF, e)
+						}
+						else
+						{
+							restore_dut("RBM"," <-", "")  onError e -> cof(subtestname, Globals.COF, e)
+						}
+						Globals.env = "RBM"
+					}
+					else if (atlasCommand == "echo")
+					{
+						Globals.plugin_parameters =  Globals.plugin_parameters + {"testname": testName,"command": dutCommand, "ignoreResp": 1}
+
+						Atlas.execute_test(description, Atlas.call_plugin, "Dut", "sendCommand",
+									   Globals.plugin_parameters, Globals.limits_file[limitGroup])
+						onError e -> cof(subtestname, Globals.COF, e)
+					}
+					# SET FAN SPEED by test plan
+					#   FIXTURESIGNAL_SETFANSPEED_0, FIXTURESIGNAL_SETFANSPEED_20, FIXTURESIGNAL_SETFANSPEED_100, 
+					#   Last n digits represents percentage
+					else if (dutCommand[0:size("FIXTURESIGNAL_SETFANSPEED_")] == "FIXTURESIGNAL_SETFANSPEED_" && atlasCommand == "setfanspeed")
+					{
+						# check defined value and error check
+						fanSpeedFromTP=numerify(dutCommand[size("FIXTURESIGNAL_SETFANSPEED_"):])
+						Atlas.Log.info("fanSpeed: " + stringify(fanSpeedFromTP))
+						setFanSpeed(fanSpeedFromTP)
+					}
+				}
+				else if (plugin == "Fixture")
+				{
+					Atlas.execute_test(description,[Globals.socTestName], Atlas.call_plugin,
+									   "Fixture", atlasCommand, Globals.plugin_parameters) onError e -> cof(subtestname, Globals.COF, e)
+				}
+				else if (plugin == "Dut")
+				{
+					if(timeout <> Nil)
+					{
+						# define hang detection timeout by Globals.hangDetectionTimeout
+						Globals.plugin_parameters =  Globals.plugin_parameters + { "HangDetectionTimeout": Globals.hangDetectionTimeout}
+						# defne timeout by following calculation
+						real_timeout = timeout + Globals.hangDetectionTimeout + 10
+						Globals.plugin_parameters =  Globals.plugin_parameters + { "timeout": real_timeout}
+					}
+					if (hangParam <> Nil && numerify(hangParam) > 0)
+					{
+						# define hang detection timeout by hangParam
+						Globals.plugin_parameters =  Globals.plugin_parameters + { "HangDetectionTimeout": numerify(hangParam)}
+						if(timeout <> Nil)
+						{
+							# defne timeout by following calculation
+							# add hangParam + 10 on timeout value.
+							# real_timeout = timeout + numerify(hangParam) + 10
+							# do not add hangParam + 10 on timeout value.
+							# we have margin in timeout value from TP
+							real_timeout = timeout
+							Globals.plugin_parameters =  Globals.plugin_parameters + { "timeout": real_timeout}
+						}
+					}
+
+					if (retestPolicy == "APPLE PASS")
+					{
+						Atlas.Log.info("Attempting to set to APPLE PASS")
+						Globals.plugin_parameters =  Globals.plugin_parameters + {"applePass": 1, "HangDetectionTimeout": real_timeout + 60}
+					}
+
+					if (Globals.tpValidationMode == :TRUE:)
+					{
+						# Test Plan Validation Mode is used to run at max timeout with no hang detection for benchmark purposes
+						Globals.plugin_parameters =  Globals.plugin_parameters + {"HangDetectionTimeout": real_timeout + 180, "timeout": real_timeout + 120}
+					}
+
+					# md files used for parsing
+					if (mdParserFlag == 1)
+					{
+						Globals.plugin_parameters =  Globals.plugin_parameters + {"parseCommand": dutCommand}
+					}
+					else if (dutCommand <> Nil)  # some Dut commands which do not go through .md parser
+					{
+						Globals.plugin_parameters =  Globals.plugin_parameters + {"command": dutCommand}
+
+						if (expect <> Nil)
+						{
+							Globals.plugin_parameters =  Globals.plugin_parameters + {"command": dutCommand, "expect": expect}
+						}
+						else if (regex <> Nil)
+						{
+							Globals.plugin_parameters =  Globals.plugin_parameters + {"command": dutCommand, "regex": regex}
+						}
+					}
+					else
+					{
+						if(atlasCommand == "setUnitType")
+						{
+							if(expect <> Nil)
+							{
+								Globals.plugin_parameters =  Globals.plugin_parameters + {"FrameTerminator": expect,
+									"unitType": environment,"RemoveNonAsciiOnRead":1,
+									"LogPath": Globals.logFile}
+							}
+							else
+							{
+								Globals.plugin_parameters =  Globals.plugin_parameters + {"unitType": environment,"RemoveNonAsciiOnRead":1,
+									"LogPath": Globals.logFile}
+							}
+
+							Globals.plugin_parameters =  Globals.plugin_parameters + {"RemovingOccurrences":{"toBeRemoved":Globals.toBeRemoved,
+																		"removeBetweenSeparator":1,"separator":"\n"},"DutConfig":
+																		{"FFUart":{"UartBaud":numerify(Globals.baudRate)}}}
+						}
+					}
+
+					if (dutCommand[0:5] == "exec ") 
+					{
+						rtosCSVLocation = tokenize(csvLocation, ".")[0] + "_rtos.csv"
+						sequence_path = Atlas.path_for_resource(rtosCSVLocation)
+						Globals.plugin_parameters = Globals.plugin_parameters
+													+ {"sequence":sequence_path,"failureCount":Globals.failureCount, "noParse":1}
+						Atlas.execute_test(description + " change FT", [Globals.socTestName,subtestname], Atlas.call_plugin, "Dut",
+					   "setUnitType", {"FrameTerminator": " " + dutCommand,
+					   "unitType": "custom", "LogPath": Globals.logFile,
+					   "timeout": 60, "AppendPacketWith": "\n",
+					   "enableSeparateReadWriteFile": 1,"RemoveNonAsciiOnRead":1,
+					   "ConsoleDataAttemptSendOnOpen": 0, "EndUartWith": "",  
+					   "RemovingOccurrences":{"toBeRemoved":Globals.toBeRemoved,"removeBetweenSeparator":1,"separator":"\n"},
+					   "LoggingLayerLogIsDateAdded" : 1, "testname": description + " change FT",
+					   "DutConfig":{"FFUart":{"UartBaud":numerify(Globals.baudRate)}}})
+						onError e -> cof(subtestname, Globals.COF, e)
+						Atlas.execute_test(description,
+									   Atlas.call_plugin, "Dut", atlasCommand,
+									   Globals.plugin_parameters, Globals.limits_file[limitGroup])
+						onError e -> cof(subtestname, Globals.COF, e)
+						Atlas.execute_test(description + " change FT Back", [Globals.socTestName,subtestname], Atlas.call_plugin, "Dut",
+					   "setUnitType", {"FrameTerminator": "SEGPE>",
+					   "unitType": "custom", "LogPath": Globals.logFile,
+					   "timeout": 60, "AppendPacketWith": "\n",
+					   "enableSeparateReadWriteFile": 1,"RemoveNonAsciiOnRead":1,
+					   "ConsoleDataAttemptSendOnOpen": 0, "EndUartWith": "",  
+					   "RemovingOccurrences":{"toBeRemoved":Globals.toBeRemoved,"removeBetweenSeparator":1,"separator":"\n"},
+					   "LoggingLayerLogIsDateAdded" : 1, "testname": description + " change FT Back",
+					   "DutConfig":{"FFUart":{"UartBaud":numerify(Globals.baudRate)}}})
+						onError e -> cof(subtestname, Globals.COF, e)
+					}
+					else
+					{
+						Atlas.Log.info("Retest Policy is: " + retestPolicy)
+						startTime = numerify(System.now())
+						Atlas.execute_test(description, Atlas.call_plugin, "Dut", atlasCommand,
+									   Globals.plugin_parameters, Globals.limits_file[limitGroup])
+						onError e -> cof(subtestname, Globals.COF, e)
+						endTime = numerify(System.now())
+						
+						if(retestPolicy == "APPLE PASS" && endTime - startTime >= real_timeout)
+						{
+							Globals.skipNow = :TRUE:
+						}
+					}
+
+					Globals.env = environment
+				}
+				else if (plugin == "TestProcesses")
+				{
+					sleep_time = numerify(environment)
+					command_timeout = numerify(timeout)
+					Atlas.execute_test("Sleep for " + stringify(environment)
+									   + " sec",[Globals.socTestName], system_sleep, sleep_time)
+					onError e -> cof(subtestname, Globals.COF, e)
+				}
+				else if (plugin == "DCSD")
+				{
+					#UI_ShowMessage("pause before DCSD")
+					restore_dut(environment, expect, "")
+				}
+				else if (plugin == "runTest")
+				{
+					if(timeout <> Nil)
+					{
+						real_timeout = timeout + Globals.hangDetectionTimeout + 10
+						Globals.plugin_parameters =  Globals.plugin_parameters + { "timeout": real_timeout}
+					}
+					if (hangParam <> Nil && numerify(hangParam) > 0)
+					{
+						Atlas.execute_test("Adjusting External Plugin Hang Detection",[Globals.socTestName,"Adjusting External Plugin Hang Detection"], Atlas.call_plugin, "Dut",
+						   "setUnitType", {"HangDetectionTimeout": numerify(hangParam),"FrameTerminator": Globals.frameTerminator,  "RemovingOccurrences":{"toBeRemoved":Globals.toBeRemoved,
+						   "removeBetweenSeparator":1,"separator":"\n"}, "unitType": Globals.unitType, "RemoveNonAsciiOnRead":1, 
+						   "LogPath": Globals.logFile, "DutConfig":{"FFUart":{"UartBaud":numerify(Globals.baudRate)}}})
+						if(timeout <> Nil)
+						{
+							# Plus 10 to give a buffer to catch the hangout
+							# add hangParam + 10 on timeout value.
+							# real_timeout = timeout + numerify(hangParam) + 10
+							# do not add hangParam + 10 on timeout value.
+							# we have margin in timeout value from TP
+							real_timeout = timeout
+							Globals.plugin_parameters =  Globals.plugin_parameters + { "timeout": real_timeout}
+						}
+					}
+
+					if (retestPolicy == "APPLE PASS")
+					{
+						Globals.plugin_parameters =  Globals.plugin_parameters + {"applePass": 1, "HangDetectionTimeout": real_timeout + 60}
+					}
+
+					if (Globals.tpValidationMode == :TRUE:)
+					{
+						Globals.plugin_parameters =  Globals.plugin_parameters + {"HangDetectionTimeout": real_timeout + 180, "timeout": real_timeout + 120}
+					}
+
+					# we do not call runRBM any longer.
+					if (atlasCommand == "runRBM" && timeout <> Nil)
+					{
+						# need to pop up a window for RBM hang, will require more trial and error
+						Globals.plugin_parameters =  Globals.plugin_parameters + {"HangDetectionTimeout": 120, "timeout": timeout + 130}
+					}
+
+					if (atlasCommand == "runSocstnCMD")
+					{
+						rtosCSVLocation = tokenize(csvLocation, ".")[0] + "_rtos.csv"
+						sequence_path = Atlas.path_for_resource(rtosCSVLocation)
+						Globals.plugin_parameters = Globals.plugin_parameters + {"sequence":sequence_path}
+					}
+					
+					if (atlasCommand == "runIfMatch")
+					{
+						if(Globals.bincutDict <> Nil)
+						{
+							environment = stringify(Globals.bincutDict[environment])[0:1]
+						}
+					}
+					
+					Globals.plugin_parameters = Globals.plugin_parameters + { "command": dutCommand, "expect": expect, "parameter": environment, 
+																"regex": regex, "pdcaprefix": pdcaPrefix, "pdcaname": subTestName, "log": Globals.logFile }
+					startTime = numerify(System.now())
+					
+					if (atlasCommand == "ddr_verf_write")
+					{
+    					Globals.plugin_parameters = Globals.plugin_parameters + { "settingsDict" : {"rd_step": "0x10", "wr_step": "0x0B", "cmdVariables": [ "$x" ], "vref_dict": Globals.vrefDict["ddr vref"], "direction": environment, "type": "hex"} }
+					}
+					
+					if (atlasCommand == "ddr_verf_read")
+                	{
+                    	Globals.vrefDict = Globals.vrefDict + Atlas.execute_test(description, Atlas.call_plugin,
+                                       "runTest", atlasCommand, Globals.plugin_parameters,
+                                       Globals.limits_file[limitGroup]) onError e -> cof(dutCommand, Globals.COF, e)
+					}else
+					{
+						Atlas.execute_test(description, Atlas.call_plugin,
+										"runTest", atlasCommand, Globals.plugin_parameters,
+										 Globals.limits_file[limitGroup])
+						onError e -> cof(subtestname, Globals.COF, e)
+					}
+
+					endTime = numerify(System.now())
+					
+					if (retestPolicy == "APPLE PASS" && endTime - startTime >= real_timeout)
+					{
+						Globals.skipNow = :TRUE:
+					}
+					
+					if (hangParam <> Nil && numerify(hangParam) > 0)
+					{
+						Atlas.execute_test("Restoring External Plugin Hang Detection",[Globals.socTestName,"Restoring External Plugin Hang Detection"], Atlas.call_plugin, "Dut",
+						   "setUnitType", {"HangDetectionTimeout": Globals.hangDetectionTimeout,"FrameTerminator": Globals.frameTerminator,  "RemovingOccurrences":{"toBeRemoved":Globals.toBeRemoved,
+						   "removeBetweenSeparator":1,"separator":"\n"}, "unitType": Globals.unitType, "RemoveNonAsciiOnRead":1, 
+						   "LogPath": Globals.logFile, "DutConfig":{"FFUart":{"UartBaud":numerify(Globals.baudRate)}}})
+					}
+				}
+				else
+				{
+					raise exception("Unsupported plugin!")
+				}
+			} # end of if(enabled)
+		} # end of csv line read
+	} # end of for loop
+}
+
+restore_dut(environment, expect, subtestname)
+{
+	#Atlas.execute_test("Put DUT into Recovery Mode", Atlas.call_plugin, "Fixture",
+	#				   "Enter IBOOT")
+					   
+	Atlas.execute_test("Put DUT into DFU Mode",[Globals.socTestName,"Put DUT into DFU Mode"], Atlas.call_plugin, "Fixture",
+					   "Enter DFU")
+
+	#Atlas.execute_test("Check for DUT in Recovery Mode", Atlas.call_plugin, "Fixture",
+	#				   "checkDeviceinRecovery", {"interval": 1, "retry": 30})            
+
+	if (environment == "Diags")
+	{
+		Atlas.execute_test("Set Unit Type to EFI",[Globals.socTestName,"Set Unit Type to EFI"], Atlas.call_plugin, "Dut",
+						   "setUnitType", {"unitType": "EFI",  "RemovingOccurrences":{"toBeRemoved":Globals.toBeRemoved,"removeBetweenSeparator":1,
+						   "separator":"\n"}, "RemoveNonAsciiOnRead":1,"DutConfig":{"FFUart":{"UartBaud":numerify(Globals.baudRate)}}})
+		Globals.unitType = "efi"
+		Globals.env = "DIAGS"
+	}
+	else
+	{
+		Atlas.execute_test("Set Unit Type to Custom",[Globals.socTestName,"Set Unit Type to Custom"], Atlas.call_plugin, "Dut",
+						   "setUnitType", {"FrameTerminator": expect,
+						   "unitType": "custom", "LogPath": Globals.logFile,
+						   "timeout": 60, "AppendPacketWith": "\n", "RemovingOccurrences":{"toBeRemoved":Globals.toBeRemoved,"removeBetweenSeparator":1,
+						   "separator":"\n"},
+						   "enableSeparateReadWriteFile": 1,"RemoveNonAsciiOnRead":1,
+						   "ConsoleDataAttemptSendOnOpen": 0, "EndUartWith": "",
+						   "LoggingLayerLogIsDateAdded" : 1, "DutConfig":{"FFUart":{"UartBaud":numerify(Globals.baudRate)}}})
+		Globals.unitType = "custom"
+		Globals.env = environment
+	}
+
+	if (Globals.enableStagger == 1)
+	{
+		Atlas.execute_test("StationUtil wait 7 sec",[Globals.socTestName,"StationUtil wait 7 sec"], Atlas.call_plugin, "StationUtils", "waitUntilReady", {"waitTime":7},{},{})
+	} 
+	else 
+	{
+		Atlas.execute_test("StationUtil wait 3 sec",[Globals.socTestName,"StationUtil wait 3 sec"], Atlas.call_plugin, "StationUtils", "waitUntilReady", {"waitTime":3},{},{})
+	}
+
+	if (environment == "EFI")
+	{
+		environment = "Diags"
+	}
+
+	# Regular restore for the factory
+	if (environment == "PERTOS")
+	{
+		if (Globals.slotNum < 5)
+		{
+			imagePath = "/Users/gdlocal/Binaries_1/" + Globals.pertosImage
+		}
+		else
+		{
+			imagePath = "/Users/gdlocal/Binaries_2/" + Globals.pertosImage
+		}
+	}
+	else if (environment == "RBM")
+	{
+		if (Globals.slotNum < 5)
+		{
+			imagePath = "/Users/gdlocal/Binaries_1/" + Globals.rbmImage
+		}
+		else
+		{
+			imagePath = "/Users/gdlocal/Binaries_2/" + Globals.rbmImage
+		}
+	}
+
+	if (environment == "RBM" || environment == "PERTOS") {
+		if (Globals.overrideRBM == :TRUE: || Globals.overridePertos == :TRUE:) {
+			# restore from memory
+			if (Globals.useMobileRestore == :TRUE:)
+			{
+				Atlas.execute_test("Restore to " + environment,[Globals.socTestName, "Restore to " + environment], Atlas.call_plugin, "runTest", "runMobileRestore", 
+					{"bundleLocation": "/Users/gdlocal/RestorePackage/CurrentBundle/Restore",
+					"prLocation": "/Users/gdlocal/Library/Application Support/PurpleRestore/SOC.pr",
+					"bootFile": imagePath,
+					"waitForBoot":1,
+					"waitForBootTimeout":60,
+					"waitForBootRetry":2,
+					"appendRestoreUartToRaw":1,
+					"timeoutToWaitForDevice":60,
+					"expect": "Restore successful",
+					"timeout": 180})
+				Atlas.execute_test("Wait for " + environment, Atlas.call_plugin,"Dut", "sendCommand", {"command": "\r","testname": Globals.socTestName, "subtestname": "Wait for " + environment }, {})
+			}
+			else
+			{
+				Atlas.execute_test("Restore to " + environment,[Globals.socTestName, "Restore to " + environment], Atlas.call_plugin, "DCSD", "restore",
+					{"bundleLocation": "/Users/gdlocal/RestorePackage/CurrentBundle/Restore",
+					"prLocation": "/Users/gdlocal/Library/Application Support/PurpleRestore/SOC.pr",
+					"bootTag": environment,
+					"bootFile": imagePath,
+					"waitForBoot":1,
+					"waitForBootTimeout":35,
+					"waitForBootRetry":2,
+					"appendRestoreUartToRaw":1, 
+					"timeoutToWaitForDevice":40}) onError e -> postRestoreFailure()
+			}
+		}
+		else if(Globals.overrideRBM == :FALSE: || Globals.overridePertos == :FALSE:) {
+			# Regular restore from bundle
+			if (Globals.useMobileRestore == :TRUE:)
+			{
+				Atlas.execute_test("Restore to " + environment,[Globals.socTestName, "Restore to " + environment], Atlas.call_plugin, "runTest", "runMobileRestore",
+					{"bundleLocation": "/Users/gdlocal/RestorePackage/CurrentBundle/Restore",
+					"prLocation": "/Users/gdlocal/Library/Application Support/PurpleRestore/SOC.pr",
+					"bootTag": environment,
+					"waitForBoot":1,
+					"waitForBootTimeout":60,
+					"waitForBootRetry":2,
+					"appendRestoreUartToRaw":1,
+					"timeoutToWaitForDevice":60,
+					"expect": "Restore successful",
+					"timeout": 180})
+				Atlas.execute_test("Wait for " + environment, Atlas.call_plugin,"Dut", "sendCommand", {"command": "\r", "timeout": 60,"testname": Globals.socTestName, "subtestname": "Wait for " + environment}, {})
+			}
+			else
+			{
+				Atlas.execute_test("Restore to " + environment,[Globals.socTestName, "Restore to " + environment], Atlas.call_plugin, "DCSD", "restore",
+					{"bundleLocation": "/Users/gdlocal/RestorePackage/CurrentBundle/Restore",
+					"prLocation": "/Users/gdlocal/Library/Application Support/PurpleRestore/SOC.pr",
+					"bootTag": environment,
+					"waitForBoot":1,
+					"waitForBootTimeout":35,
+					"waitForBootRetry":2,
+					"appendRestoreUartToRaw":1,
+					"timeoutToWaitForDevice":40}) onError e -> postRestoreFailure()
+			}
+		}
+	}
+
+	if (Globals.firstPERTOS == 1 && environment == "PERTOS")
+	{
+		Atlas.execute_test("Get " + environment + " Version",[Globals.socTestName,"Get " + environment + " Version"], Atlas.call_plugin, "runTest", 
+							"getEnvVersion", {"expect": "rtos", "log": Globals.logFile})
+		Globals.firstPERTOS = 0
+	}
+	else if (Globals.firstRBM == 1 &&  environment == "RBM")
+	{
+		Atlas.execute_test("Get " + environment + " Version",[Globals.socTestName,"Get " + environment + " Version"], Atlas.call_plugin, "runTest", 
+							"getEnvVersion", {"expect": "rbm", "log": Globals.logFile})
+		Globals.firstRBM = 0
+	}
+}
+
+cof(name, enabled, error)
+{
+	# failureBucket has to be called first. It will use last command to diagnose. 
+	Atlas.execute_test("failureBucket",[Globals.socTestName,"failureBucket"], Atlas.call_plugin, "runTest", "failureBucket", {"unitLog" : "unit.log", "uartLog" : Globals.logFile, "resetPattern" : "pmu: flt ([abcdef\\d]+):[abcdef\\d]+", "hangPattern" : "(UNIT\\s+PANIC)"})
+		onError e -> Atlas.Log.error("Failed to Perform Error Bucket: " + stringify(e))
+
+	Globals.hasEverFailed = :TRUE:
+
+	Globals.failureCount = Globals.failureCount + 1
+
+	# Atlas.call_plugin("runTest", "updateUserInfo", 
+	# 				   {"userinfo":{ "retestPolicy_" + stringify(Globals.failureCount) : "AAB" }})
+
+	# may need to update regex string based on slotNum.
+	if (Globals.slotNum < 5)
+	{
+		errorCount0 = 0
+		errorCount0 = Atlas.execute_test("UART USB Disconnection Check",[Globals.socTestName],
+				   Atlas.call_plugin, "runTest", "checkError", {"expect": "--- Device DETACHED --- : locationID=0x[0-9A-Za-z]{8}",
+				   "log": "Unit.log", "testname":"UART USB", "subtestname":"Drop", "subsubtestname":"Count", "omit":0, "byPASS":1})
+		onError e ->  Atlas.Log.info("USB Disconnection Check " + e.class + " " + e.message)
+		Atlas.Log.info("UART USB Disconnection Check - errorCount0: "+stringify(errorCount0))
+	}
+	else
+	{
+		errorCount0 = 0
+		errorCount0 = Atlas.execute_test("UART USB Disconnection Check",[Globals.socTestName],
+				   Atlas.call_plugin, "runTest", "checkError", {"expect": "--- Device DETACHED --- : locationID=0x[0-9A-Za-z]{8}",
+				   "log": "Unit.log", "testname":"UART USB", "subtestname":"Drop", "subsubtestname":"Count", "omit":0, "byPASS":1})
+		onError e ->  Atlas.Log.info("USB Disconnection Check " + e.class + " " + e.message)
+		Atlas.Log.info("UART USB Disconnection Check - errorCount0: "+stringify(errorCount0))
+	}
+	#
+
+	Atlas.execute_test("Get Fan Status",[Globals.socTestName,"Get Fan Status"], Atlas.call_plugin, "Fixture", "IS FAN OK", {},{}, {"timeout":60})
+		onError e -> if (:TRUE:) {
+			#Globals.hasEverFailed = :TRUE:
+			#Globals.failureCount = Globals.failureCount + 1
+			Atlas.Log.error("FanCheck Failed!!")
+		}
+
+	if (enabled)
+	{
+		errorCount1 = 0
+		errorCount1 = Atlas.execute_test("Panic / Hang Error Checking", 
+						[Globals.socTestName,"writeSync Error Check"], Atlas.call_plugin, "runTest", "checkError",
+					   {"expect": "UNIT PANIC", 
+					   "log": "Unit.log", "byPASS":1}) onError e -> Atlas.Log.info("caught exception in rush sequence error " + e.class + " " + e.message)
+		errorCount1 = errorCount1 - 2  #discard debug info
+		
+		if(numerify(errorCount1) > numerify(Globals.errorCount1) && Globals.env == "RBM")
+		{
+
+            Atlas.execute_test("Send Help", Atlas.call_plugin, "Dut", "sendCommand", {"command": "help","timeout": 60, "testname": Globals.socTestName, "subtestname": "Send Help"})onError e -> Atlas.Log.info("Failed to send help to RBM")
+            
+			UI_ShowMessage("Suspected RBM Hang on " + Atlas.Unit.unit_identifier + "!!! Call EE engineer to collect data before clicking OK!!! ("
+							+ name + ": " + error.class + ", " + "HANG/PANIC" + ")")
+			Atlas.Log.info("Suspected RBM Hang on" + Atlas.Unit.unit_identifier + "!!! Call EE engineer to collect data before clicking OK!!! (" 
+							+ name + ": " + error.class + ", " + "HANG/PANIC" + ")")
+			Globals.skipNow = :TRUE:
+		}
+
+		if (numerify(errorCount1) > numerify(Globals.errorCount1) && Globals.env == "PERTOS")
+		{
+			Atlas.execute_test("Send Ctrl+Z", Atlas.call_plugin, "Dut", "sendCommand", {"command": cformat("%c",26),"timeout": 10, "testname": Globals.socTestName, "subtestname": "Send Ctrl+Z"})onError e -> Atlas.Log.error("RTOS Stack Dump Failed!!!")
+
+            UI_ShowMessage("Suspected RTOS Hang on " + Atlas.Unit.unit_identifier+ "!!! Call EE engineer to collect data before clicking OK!!! ("
+                    + name + ": " + error.class + ", " + "HANG/PANIC" + ")")
+            Atlas.Log.info("Suspected RTOS Hang on" + Atlas.Unit.unit_identifier + "!!! Call EE engineer to collect data before clicking OK!!! (" 
+							+ name + ": " + error.class + ", " + "HANG/PANIC" + ")")
+			Globals.skipNow = :TRUE:
+		}
+
+		Atlas.Log.info("Previous, global errorCount1: "+stringify(Globals.errorCount1))
+		Globals.errorCount1 = numerify(errorCount1) + 3
+		Atlas.Log.info("Now, global errorCount1: "+stringify(Globals.errorCount1))
+		
+		errorCount2 = 0
+		errorCount2 = Atlas.execute_test("Response Error Check", [Globals.socTestName,"Response Error Check"], 
+						Atlas.call_plugin, "runTest", "checkError",
+					   {"expect": "strings to parse is empt", 
+					   "log": "Unit.log", "byPASS":1}) onError e ->  Atlas.Log.info("caught exception in rush sequence error " + e.class + " " + e.message)
+		errorCount2 = errorCount2 - 2  #discard debug info
+
+		if (numerify(errorCount2) > numerify(Globals.errorCount2))
+		{
+			Globals.skipNow = :TRUE:
+		}
+
+		Atlas.Log.info("Previous, global errorCount2: "+stringify(Globals.errorCount2))
+		Globals.errorCount2 = numerify(errorCount2) + 3
+		Atlas.Log.info("Now, global errorCount2: "+stringify(Globals.errorCount2))
+
+		if (Strings.tolower(tokenize(name,"_")[-1]) == "boot")
+		{
+			Globals.skipNow = :TRUE:
+		}
+
+		# if enabled only raise exception if it is not a plugin failure
+		if (error.class <> Atlas.Exceptions.PluginFailedError && error.class <> Atlas.Exceptions.UnitPanic)
+		{
+			Atlas.Log.error("Hey, caught exception in rush sequence error "+ error.class + " " + error.message)
+			raise error
+		}
+	}
+	else
+	{
+		raise error
+	}
+}
+
+postRestoreFailure()
+{
+	# Generic USB Disconnection Check, will fail if either fixture disconnects and a DUT fails to restore
+	Atlas.execute_test("Restore SOC_USB Disconnection Check",[Globals.socTestName],
+				   Atlas.call_plugin, "runTest", "checkError", {"expect": "--- Device DETACHED --- : locationID=0x[0-9A-Za-z]{8}",
+				   "log": "Unit.log", "testname":"Restore USB", "subtestname":"Drop", "subsubtestname":"Count", "omit":1, "byPASS":1})
+		onError e ->  Atlas.Log.info("USB Disconnection Check " + e.class + " " + e.message)
+	restorePanicCount = Atlas.execute_test("Restore Panic Check",[Globals.socTestName],
+				   Atlas.call_plugin, "runTest", "checkError", {"regex": "panic\\\(.*\\\)",
+				   "log": Globals.logFile, "testname":"Restore", "subtestname":"Panic", "subsubtestname":"Count", "alwaysPass":1})
+		onError e ->  Atlas.Log.info("Restore Panic Check " + e.class + " " + e.message)
+	if (numerify(restorePanicCount) > 0)
+	{
+		UI_ShowMessage("Restore Panic, please contact EE for coredump!!!")
+	}
+	shutDownPower()
+	raise $#@!("Failed to Restore!")
+}
+
+shutDownPower()
+{
+	Atlas.execute_test("Power Off DUT",[Globals.socTestName,"Power Off DUT"], Atlas.call_plugin,
+			   "Fixture", "POWER OFF", {},{}, {"timeout": 60})
+}
+

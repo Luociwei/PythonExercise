@@ -1,0 +1,209 @@
+﻿ENABLE,PDCAPREFIX,PDCANAME,DUTCOMMAND,TIMEOUT,PLUGIN,ATLASCOMMAND,MDPARSER,REGEX,EXPECT,PARAMETER,LIMITGROUP,RETESTPOLICY,HANGTIMEOUT,BGCT,COF
+0,2001,RTOS_Setup_Boot,FIXTURESIGNAL_BOOT_RTOS,60,Rush,restore,0,,SEGPE>,PERTOS,xVT,AAB,,,1
+1,2002,print test plan version,echo TEST_PLAN V3 - Aruba A1 - 20190509,5,Rush,echo,0,,PASS echo,PERTOS,xVT,AAB,,,1
+1,2003,disable charging 1,smb open 12 0,5,Dut,sendCommand,0,,PASS smb open 12 0,PERTOS,xVT,AAB,,,1
+1,2004,disable charging 2,smb probe 12,5,Dut,sendCommand,0,,PASS smb probe 12,PERTOS,xVT,AAB,,,1
+1,2005,disable charging 3,smb 12 0xea 0x1932,5,Dut,sendCommand,0,,PASS smb 12 0xea 0x1932,PERTOS,xVT,AAB,,,1
+1,2006,disable charging 4,smb 12 0xea 0x1932 0x1c,5,Dut,sendCommand,0,,PASS smb 12 0xea 0x1932 0x1c,PERTOS,xVT,AAB,,,1
+1,2007,disable charging 5,smb 12 0xea 0x1932,5,Dut,sendCommand,0,,PASS smb 12 0xea 0x1932,PERTOS,xVT,AAB,,,1
+1,2008,pmgr offset -p8 +12500 -p9 +50000,pmgr offset -p8 +12500 -p9 +50000,5,Dut,sendCommand,0,,PASS,PERTOS,xVT,AAB,,,1
+1,2009,pmgr mode 0x1FF1211,pmgr mode 0x1FF1211,5,Dut,sendCommand,0,,PASS pmgr mode 0x1FF1211,PERTOS,xVT,AAB,,,1
+1,2010,Dump Fuse ECID,fuse ecid,5,Dut,sendCommand,0,,PASS fuse ecid,PERTOS,xVT,AAB,,,1
+1,2011,Dump Fuse Config,fuse config,5,Dut,sendCommand,0,,PASS fuse config,PERTOS,xVT,AAB,,,1
+1,2012,Show DRAM Training,ddr print info,5,Dut,sendCommand,0,,PASS ddr print info,PERTOS,xVT,AAB,,,1
+1,2013,Set to use Bin voltage,pmgr vmode bin,5,Dut,sendCommand,0,,PASS pmgr vmode bin,PERTOS,xVT,AAB,,,1
+1,2014,PMU Rails Bin,pmu rails,5,Dut,sendCommand,0,,PASS pmu rails,PERTOS,xVT,AAB,,,1
+1,2015,Set the number of clock jitter,os jitter 10,5,Dut,sendCommand,0,,PASS os jitter 10,PERTOS,xVT,AAB,,,1
+1,2016,Temp Sense Test,sense hyst 7 7 1,5,Dut,sendCommand,0,,PASS sense hyst 7 7 1,PERTOS,xVT,AAB,,,1
+1,2017,Enable Thermal Throttling PrePdump,sense thread resume,5,Dut,sendCommand,0,,PASS sense thread resume,PERTOS,xVT,AAB,,,1
+1,2018,Set SOCHOT temperature to be 110C,sense sochot 115,5,Dut,sendCommand,0,,PASS sense sochot 115,PERTOS,xVT,AAB,,,1
+1,2019,SET TOOHOT to be 95C,sense toohot 95 95 7,5,Dut,sendCommand,0,,PASS sense toohot 95 95 7,PERTOS,xVT,AAB,,,1
+1,2020,enable DVTM,pmgr dvtm enable,5,Dut,sendCommand,0,,PASS pmgr dvtm enable,PERTOS,xVT,AAB,,,1
+1,2021,enable DVMR,pmgr dvmr enable,5,Dut,sendCommand,0,,PASS pmgr dvmr enable,PERTOS,xVT,AAB,,,1
+1,2022,set DRAM fresh rate,ddr trefi soc,5,Dut,sendCommand,0,,PASS ddr trefi soc,PERTOS,xVT,AAB,,,1
+1,2023,DDR protect region for FS,mmu ddr-protect fsx,5,Dut,sendCommand,0,,PASS mmu ddr-protect fsx,PERTOS,xVT,AAB,,,1
+1,2024,slave up CPU0,slave up acc,5,Dut,sendCommand,0,,PASS slave up acc,PERTOS,xVT,AAB,,,1
+1,2025,Setup PMS,slave up pms mar_sram.con alloc,5,Dut,sendCommand,0,,PASS slave up pms mar_sram.con alloc,PERTOS,xVT,AAB,,,1
+1,2026,Clock switcher config,clksw config pms 4 260 0x1FF1111 0x6FF5731,5,Dut,sendCommand,0,,PASS clksw config pms 4 260 0x1FF1111 0x6FF5731,PERTOS,xVT,AAB,,,1
+1,2027,Clock switcher on,clksw on,5,Dut,sendCommand,0,,PASS clksw on,PERTOS,xVT,AAB,,,1
+1,2028,enable sense tj,sense tj enable -s,5,Dut,sendCommand,0,,PASS sense tj enable -s,PERTOS,xVT,AAB,,,1
+1,2029,sense telem enable,sense ts-test-telem config 10 125 1,5,Dut,sendCommand,0,,PASS sense ts-test-telem config 10 125 1,PERTOS,xVT,AAB,,,1
+1,2030,sense skipmtr config,sense ts-test-telem enable -skipmtr,5,Dut,sendCommand,0,,PASS sense ts-test-telem enable -skipmtr,PERTOS,xVT,AAB,,,1
+1,2031,temp sensor test,sc run 26 50,300,Dut,sendCommand,0,,PASS sc run 26 50,PERTOS,xVT,A -> FA,,,1
+1,2032,sense telem disable,sense ts-test-telem disable,5,Dut,sendCommand,0,,PASS sense ts-test-telem disable,PERTOS,xVT,AAB,,,1
+1,2033,disable sense tj,sense tj disable,5,Dut,sendCommand,0,,PASS sense tj disable,PERTOS,xVT,AAB,,,1
+1,2034,Clock switcher off,clksw off,5,Dut,sendCommand,0,,PASS clksw off,PERTOS,xVT,AAB,,,1
+1,2035,Temp Sensor value auto reset,sense reset auto,5,Dut,sendCommand,0,,PASS sense reset auto,PERTOS,xVT,AAB,,,1
+1,2036,sense sc enable,sense ts-test-sc enable,5,Dut,sendCommand,0,,PASS sense ts-test-sc enable,PERTOS,xVT,AAB,,,1
+1,2037,pmgr mode 0x4ff4233,pmgr mode 0x4ff4233,5,Dut,sendCommand,0,,PASS pmgr mode 0x4ff4233,PERTOS,xVT,AAB,,,1
+1,2038,DRAM Package Test,sc run 54,300,Dut,sendCommand,0,,PASS sc run 54,PERTOS,xVT,A -> FA,,,1
+1,2039,DRAM Cell Test,sc run 55,300,Dut,sendCommand,0,,PASS sc run 55,PERTOS,xVT,A -> FA,,,1
+1,2040,Dual core KHartmann on all of DRAM,sc run 56,300,Dut,sendCommand,0,,PASS sc run 56,PERTOS,xVT,A -> FA,,,1
+1,2041,BBQ Config,bbq config fg 625 0 4 150 0 0 F C,5,Dut,sendCommand,0,,PASS bbq config fg 625 0 4 150 0 0 F C,PERTOS,xVT,AAB,,,1
+1,2042,BBQ Config Variant,bbq config 0xFF 500 150 5 100 24 6 F C,5,Dut,sendCommand,0,,PASS bbq config 0xFF 500 150 5 100 24 6 F C,PERTOS,xVT,AAB,,,1
+1,2043,enable BBQ,bbq on,5,Dut,sendCommand,0,,PASS bbq on,PERTOS,xVT,AAB,,,1
+1,2044,Clock switcher config,clksw config pms 4 10000 -j 2500 0x1FF1211 0x1FF1211 0x1FF1211 0x2FF2222 0x3FF3222 0x4FF4233 0x5FF5233 0x6FF5233,5,Dut,sendCommand,0,,PASS clksw config pms 4 10000 -j 2500 0x1FF1211 0x1FF1211 0x1FF1211 0x2FF2222 0x3FF3222 0x4FF4233 0x5FF5233 0x6FF5233,PERTOS,xVT,AAB,,,1
+1,2045,Clock switcher on,clksw on,5,Dut,sendCommand,0,,PASS clksw on,PERTOS,xVT,AAB,,,1
+1,2046,Core M$ Bonfire Test 2,sc run 6 4,300,Dut,sendCommand,0,,PASS sc run 6 4,PERTOS,xVT,A -> FA,,,1
+1,2047,Multi-core BBQ 64 Test 2,sc run 19 50,300,Dut,sendCommand,0,,PASS sc run 19 50,PERTOS,xVT,A -> FA,,,1
+1,2048,Clock switcher off,clksw off,5,Dut,sendCommand,0,,PASS clksw off,PERTOS,xVT,AAB,,,1
+1,2049,disable BBQ,bbq off,5,Dut,sendCommand,0,,PASS bbq off,PERTOS,xVT,AAB,,,1
+1,2050,BBQ Config,bbq config fg 625 0 4 150 0 0 F C,5,Dut,sendCommand,0,,PASS bbq config fg 625 0 4 150 0 0 F C,PERTOS,xVT,AAB,,,1
+1,2051,BBQ Config Variant,bbq config 0xFF 500 150 5 100 24 6 F C,5,Dut,sendCommand,0,,PASS bbq config 0xFF 500 150 5 100 24 6 F C,PERTOS,xVT,AAB,,,1
+1,2052,enable BBQ,bbq on,5,Dut,sendCommand,0,,PASS bbq on,PERTOS,xVT,AAB,,,1
+1,2053,pmgr mode 0x73F5231,pmgr mode 0x73F5231,5,Dut,sendCommand,0,,PASS pmgr mode 0x73F5231,PERTOS,xVT,AAB,,,1
+1,2054,slave down PCORE3,slave down 7,5,Dut,sendCommand,0,,PASS slave down 7,PERTOS,xVT,AAB,,,1
+1,2055,slave down PCORE2,slave down 6,5,Dut,sendCommand,0,,PASS slave down 6,PERTOS,xVT,AAB,,,1
+1,2056,BBQ Config Variant,bbq config 0x3F 500 150 5 100 24 6 F C,5,Dut,sendCommand,0,,PASS bbq config 0x3F 500 150 5 100 24 6 F C,PERTOS,xVT,AAB,,,1
+1,2057,Core M$ Bonfire Test 3,sc run 6 5 -coremask 0xC0,300,Dut,sendCommand,0,,PASS sc run 6 5 -coremask 0xC0,PERTOS,xVT,A -> FA,,,1
+1,2058,ACC multi-core iCache Test 3,sc run 13 10 -coremask 0xC0,300,Dut,sendCommand,0,,PASS sc run 13 10 -coremask 0xC0,PERTOS,xVT,A -> FA,,,1
+1,2059,Multi-core BBQ 64 Test 3,sc run 19 10 -coremask 0xC0,300,Dut,sendCommand,0,,PASS sc run 19 10 -coremask 0xC0,PERTOS,xVT,A -> FA,,,1
+1,2060,slave down PCORE1,slave down 5,5,Dut,sendCommand,0,,PASS slave down 5,PERTOS,xVT,AAB,,,1
+1,2061,BBQ Config Variant,bbq config 0x1F 500 150 5 100 24 6 F C,5,Dut,sendCommand,0,,PASS bbq config 0x1F 500 150 5 100 24 6 F C,PERTOS,xVT,AAB,,,1
+1,2062,pmgr mode 0x81F5231,pmgr mode 0x81F5231,5,Dut,sendCommand,0,,PASS pmgr mode 0x81F5231,PERTOS,xVT,AAB,,,1
+1,2063,Core M$ Bonfire Test 4,sc run 6 5 -coremask 0xE0,300,Dut,sendCommand,0,,PASS sc run 6 5 -coremask 0xE0,PERTOS,xVT,A -> FA,,,1
+1,2064,Multi-core BBQ 64 Test 4,sc run 19 10 -coremask 0xE0,300,Dut,sendCommand,0,,PASS sc run 19 10 -coremask 0xE0,PERTOS,xVT,A -> FA,,,1
+1,2065,pmgr mode 0x91F5231 ,pmgr mode 0x91F5231,5,Dut,sendCommand,0,,PASS pmgr mode 0x91F5231,PERTOS,xVT,AAB,,,1
+1,2066,Core M$ Bonfire Test 5,sc run 6 5 -coremask 0xE0,300,Dut,sendCommand,0,,PASS sc run 6 5 -coremask 0xE0,PERTOS,xVT,A -> FA,,,1
+1,2067,Multi-core BBQ 64 Test 5,sc run 19 10 -coremask 0xE0,300,Dut,sendCommand,0,,PASS sc run 19 10 -coremask 0xE0,PERTOS,xVT,A -> FA,,,1
+1,2068,BBQ Config Variant,bbq config 0x1F 500 150 5 100 24 6 F A,5,Dut,sendCommand,0,,PASS bbq config 0x1F 500 150 5 100 24 6 F A,PERTOS,xVT,AAB,,,1
+1,2069,start BBQ,bbq start,5,Dut,sendCommand,0,,PASS bbq start,PERTOS,xVT,AAB,,,1
+1,2070,stop BBQ,bbq stop,5,Dut,sendCommand,0,,PASS bbq stop,PERTOS,xVT,AAB,,,1
+1,2071,slave down PCORE1,slave up 5,5,Dut,sendCommand,0,,PASS slave up 5,PERTOS,xVT,AAB,,,1
+1,2072,slave down PCORE2,slave up 6,5,Dut,sendCommand,0,,PASS slave up 6,PERTOS,xVT,AAB,,,1
+1,2073,slave down PCORE3,slave up 7,5,Dut,sendCommand,0,,PASS slave up 7,PERTOS,xVT,AAB,,,1
+1,2074,disable BBQ,bbq off,5,Dut,sendCommand,0,,PASS bbq off,PERTOS,xVT,AAB,,,1
+1,2075,Clock switcher config,clksw config pms 4 100000 -j 20000 0x1FF1211 0x1FF1211 0x1FF1211 0x1FF1211 0x2FF2222 0x3FF3222 0x4FF4233 0x5FF5233 0x6FF5233,5,Dut,sendCommand,0,,PASS clksw config pms 4 100000 -j 20000 0x1FF1211 0x1FF1211 0x1FF1211 0x1FF1211 0x2FF2222 0x3FF3222 0x4FF4233 0x5FF5233 0x6FF5233,PERTOS,xVT,AAB,,,1
+1,2076,Clock switcher on,clksw on,5,Dut,sendCommand,0,,PASS clksw on,PERTOS,xVT,AAB,,,1
+1,2077,Bonfire all bonfire tests,sc run 605,1500,Dut,sendCommand,0,,PASS sc run 605,PERTOS,xVT,A -> FA,800,,1
+1,2078,Clock switch off,clksw off,5,Dut,sendCommand,0,,PASS clksw off,PERTOS,xVT,AAB,,,1
+1,2079,pmgr mode 0x2FF2233,pmgr mode 0x2FF2233,5,Dut,sendCommand,0,,PASS pmgr mode 0x2FF2233,PERTOS,xVT,AAB,,,1
+1,2080,DDR margin test,ddr margin test 0x303 30,300,Dut,sendCommand,0,,PASS ddr margin test 0x303 30,PERTOS,xVT,A -> FA,,,1
+1,2081,switch to DRAM,xfer con,5,Dut,sendCommand,0,,PASS xfer con,PERTOS,xVT,AAB,,,1
+1,2082,pmgr mode 0x1FF1211,pmgr mode 0x1FF1211,5,Dut,sendCommand,0,,PASS pmgr mode 0x1FF1211,PERTOS,xVT,AAB,,,1
+1,2083,DDR protect region for FS,mmu ddr-protect fsx,5,Dut,sendCommand,0,,PASS mmu ddr-protect fsx,PERTOS,xVT,AAB,,,1
+1,2084,set up jitter,os jitter 10,5,Dut,sendCommand,0,,PASS os jitter 10,PERTOS,xVT,AAB,,,1
+1,2085,setup temp hysteresis settings,sense hyst 7 7 1,5,Dut,sendCommand,0,,PASS sense hyst 7 7 1,PERTOS,xVT,AAB,,,1
+1,2086,resume temp throttling thread,sense thread resume,5,Dut,sendCommand,0,,PASS sense thread resume,PERTOS,xVT,AAB,,,1
+1,2087,setup SOCHOT temp,sense sochot 120,5,Dut,sendCommand,0,,PASS sense sochot 120,PERTOS,xVT,AAB,,,1
+1,2088,setup TOOHOT temp,sense toohot 100 100 7,5,Dut,sendCommand,0,,PASS sense toohot 100 100 7,PERTOS,xVT,AAB,,,1
+1,2089,sense reset auto,sense reset auto,5,Dut,sendCommand,0,,PASS sense reset auto,PERTOS,xVT,AAB,,,1
+1,2090,sense sc enable,sense ts-test-sc enable,5,Dut,sendCommand,0,,PASS sense ts-test-sc enable,PERTOS,xVT,AAB,,,1
+1,2091,Start CPU0,slave up acc,5,Dut,sendCommand,0,,PASS slave up acc,PERTOS,xVT,AAB,,,1
+1,2092,linear mapping,mmu ddr-linear,5,Dut,sendCommand,0,,PASS mmu ddr-linear,PERTOS,xVT,AAB,,,1
+1,2093,fs mount ddr,fs mount ddr,5,Dut,sendCommand,0,,PASS fs mount ddr,PERTOS,xVT,AAB,,,1
+1,2094,fs mount ddrx,fs mount ddrx,5,Dut,sendCommand,0,,PASS fs mount ddrx,PERTOS,xVT,AAB,,,1
+1,2095,slave up sio,slave up sio mar_dram.con alloc,5,Dut,sendCommand,0,,PASS slave up sio mar_dram.con alloc,PERTOS,xVT,AAB,,,1
+1,2096,slave up aud,slave up aud mar_dram.con alloc,5,Dut,sendCommand,0,,PASS slave up aud mar_dram.con alloc,PERTOS,xVT,AAB,,,1
+1,2097,slave up see,slave up sve mar_dram.con alloc,5,Dut,sendCommand,0,,PASS slave up sve mar_dram.con alloc,PERTOS,xVT,AAB,,,1
+1,2098,slave up pms,slave up pms mar_dram.con alloc,5,Dut,sendCommand,0,,PASS slave up pms mar_dram.con alloc,PERTOS,xVT,AAB,,,1
+1,2099,slave up aop,slave up aop mar_dram.con sram,5,Dut,sendCommand,0,,PASS slave up aop mar_dram.con sram,PERTOS,xVT,AAB,,,1
+1,2100,slave up smc,slave up smc mar_dram.con alloc,5,Dut,sendCommand,0,,PASS slave up smc mar_dram.con alloc,PERTOS,xVT,AAB,,,1
+1,2101,slave up ane,slave up ane mar_dram.con alloc,5,Dut,sendCommand,0,,PASS slave up ane mar_dram.con alloc,PERTOS,xVT,AAB,,,1
+1,2102,slave up ans,slave up ans mar_dram.con alloc,5,Dut,sendCommand,0,,PASS slave up ans mar_dram.con alloc,PERTOS,xVT,AAB,,,1
+1,2103,slave up sip,slave up isp mar_dram.con alloc,5,Dut,sendCommand,0,,PASS slave up isp mar_dram.con alloc,PERTOS,xVT,AAB,,,1
+1,2104,slave up gfx,slave up gfx mar_dram.con alloc,5,Dut,sendCommand,0,,PASS slave up gfx mar_dram.con alloc,PERTOS,xVT,AAB,,,1
+1,2105,Print CPUs info,slave info,5,Dut,sendCommand,0,,PASS slave info,PERTOS,xVT,AAB,,,1
+1,2106,pmgr mode 0x6FF5733,pmgr mode 0x6FF5733,5,Dut,sendCommand,0,,PASS pmgr mode 0x6FF5733,PERTOS,xVT,AAB,,,1
+1,2107,slave up SEP,slave up sep sep_dram.sep alloc,5,Dut,sendCommand,0,,PASS slave up sep sep_dram.sep alloc,PERTOS,xVT,AAB,,,1
+1,2108,SEP + DPIPE_EXT vfixed test,sc run 151,300,Dut,sendCommand,0,,PASS sc run 151,PERTOS,xVT,A -> FA,,,1
+1,2109,pmgr mode 0x6FF5723,pmgr mode 0x6FF5723,5,Dut,sendCommand,0,,PASS pmgr mode 0x6FF5723,PERTOS,xVT,AAB,,,1
+1,2110,Dump ISP_SRC_SEL,mem rd 32 0x23B068040,5,Dut,sendCommand,0,,PASS mem rd 32 0x23B068040,PERTOS,xVT,AAB,,,1
+1,2111,Set MS3 ISP CLK 24MHz,mem wr 32 0x23B068040 0x55055555,5,Dut,sendCommand,0,,PASS mem wr 32 0x23B068040 0x55055555,PERTOS,xVT,AAB,,,1
+1,2112,pmgr mode 0x6FF5733,pmgr mode 0x6FF5733,5,Dut,sendCommand,0,,PASS pmgr mode 0x6FF5733,PERTOS,xVT,AAB,,,1
+1,2113,ISP Mem test,sc run 149,300,Dut,sendCommand,0,,PASS sc run 149,PERTOS,xVT,A -> FA,,,1
+1,2114,pmgr mode 0x6FF5723,pmgr mode 0x6FF5723,5,Dut,sendCommand,0,,PASS pmgr mode 0x6FF5723,PERTOS,xVT,AAB,,,1
+1,2115,Restore MS3 ISP CLK,mem wr 32 0x23B068040 0x55555555,5,Dut,sendCommand,0,,PASS mem wr 32 0x23B068040 0x55555555,PERTOS,xVT,AAB,,,1
+1,2116,pmgr mode 0x43F4213,pmgr mode 0x43F4213,5,Dut,sendCommand,0,,PASS pmgr mode 0x43F4213,PERTOS,xVT,AAB,,,1
+1,2117,ISP SIF DMA test 1,sc run 153 5,300,Dut,sendCommand,0,,PASS sc run 153 5,PERTOS,xVT,A -> FA,,,1
+1,2118,AVD VP9 codec test 1,sc run 154,300,Dut,sendCommand,0,,PASS sc run 154,PERTOS,xVT,A -> FA,,,1
+1,2119,pmgr mode 0x43F4223,pmgr mode 0x43F4223,5,Dut,sendCommand,0,,PASS pmgr mode 0x43F4223,PERTOS,xVT,AAB,,,1
+1,2120,ISP SIF DMA test 2,sc run 153 5,300,Dut,sendCommand,0,,PASS sc run 153 5,PERTOS,xVT,A -> FA,,,1
+1,2121,AVD VP9 codec test 2,sc run 154,300,Dut,sendCommand,0,,PASS sc run 154,PERTOS,xVT,A -> FA,,,1
+0,2122,DISP0_FE_PS override 0xF,mem wr 32 0x23b080348 0xF,5,Dut,sendCommand,0,,PASS mem wr 32 0x23b080348 0xF,PERTOS,xVT,AAB,,,1
+0,2123,DISP0_BE_PS override 0xF,mem wr 32 0x23b080350 0xF,5,Dut,sendCommand,0,,PASS mem wr 32 0x23b080350 0xF,PERTOS,xVT,AAB,,,1
+0,2124,DP_PS override 0xF,mem wr 32 0x23b080358 0xF,5,Dut,sendCommand,0,,PASS mem wr 32 0x23b080358 0xF,PERTOS,xVT,AAB,,,1
+0,2125,DISP0_FE_PS override 0x4,mem wr 32 0x23b080348 0x4,5,Dut,sendCommand,0,,PASS mem wr 32 0x23b080348 0x4,PERTOS,xVT,AAB,,,1
+0,2126,DISP0_BE_PS override 0x4,mem wr 32 0x23b080350 0x4,5,Dut,sendCommand,0,,PASS mem wr 32 0x23b080350 0x4,PERTOS,xVT,AAB,,,1
+0,2127,DP_PS override 0x4,mem wr 32 0x23b080358 0x4,5,Dut,sendCommand,0,,PASS mem wr 32 0x23b080358 0x4,PERTOS,xVT,AAB,,,1
+0,2128,DISP0_FE_PS override 0x0,mem wr 32 0x23b080348 0x0,5,Dut,sendCommand,0,,PASS mem wr 32 0x23b080348 0x0,PERTOS,xVT,AAB,,,1
+0,2129,DISP0_BE_PS override 0x0,mem wr 32 0x23b080350 0x0,5,Dut,sendCommand,0,,PASS mem wr 32 0x23b080350 0x0,PERTOS,xVT,AAB,,,1
+0,2130,DP_PS override 0x0,mem wr 32 0x23b080358 0x0,5,Dut,sendCommand,0,,PASS mem wr 32 0x23b080358 0x0,PERTOS,xVT,AAB,,,1
+1,2131,dpipe test with compression 1,sc run 155,300,Dut,sendCommand,0,,PASS sc run 155,PERTOS,xVT,A -> FA,,,1
+1,2132,pmgr mode 0x43F4233,pmgr mode 0x43F4233,5,Dut,sendCommand,0,,PASS pmgr mode 0x43F4233,PERTOS,xVT,AAB,,,1
+1,2133,ISP SIF DMA test 3,sc run 153 5,300,Dut,sendCommand,0,,PASS sc run 153 5,PERTOS,xVT,A -> FA,,,1
+1,2134,AVD VP9 codec test 3,sc run 154,300,Dut,sendCommand,0,,PASS sc run 154,PERTOS,xVT,A -> FA,,,1
+1,2135,dpipe test with compression 2,sc run 155,300,Dut,sendCommand,0,,PASS sc run 155,PERTOS,xVT,A -> FA,,,1
+1,2136,pmgr mode 0x6FF5733,pmgr mode 0x6FF5733,5,Dut,sendCommand,0,,PASS pmgr mode 0x6FF5733,PERTOS,xVT,AAB,,,1
+1,2137,pmgr set-sep-clk 6,pmgr set-sep-clk 6,5,Dut,sendCommand,0,,PASS pmgr set-sep-clk 6,PERTOS,xVT,AAB,,,1
+1,2138,ext dpipe test with compression 1,sc run 156,300,Dut,sendCommand,0,,PASS sc run 156,PERTOS,xVT,A -> FA,,,1
+1,2139,pmgr set-sep-clk 5,pmgr set-sep-clk 5,5,Dut,sendCommand,0,,PASS pmgr set-sep-clk 5,PERTOS,xVT,AAB,,,1
+1,2140,slave down gfx,slave down gfx,5,Dut,sendCommand,0,,PASS slave down gfx,PERTOS,xVT,AAB,,,1
+1,2141,Clock switcher config - 6,clksw config pms 4 10000 -j 2000 0x4FF4213 0x4FF4323 0x4FF4433 0x4FF4533 0x4FF4633 0x4FF4733,5,Dut,sendCommand,0,,PASS clksw config pms 4 10000 -j 2000 0x4FF4213 0x4FF4323 0x4FF4433 0x4FF4533 0x4FF4633 0x4FF4733,PERTOS,xVT,AAB,,,1
+1,2142,Clock switcher on,clksw on,5,Dut,sendCommand,0,,PASS clksw on,PERTOS,xVT,AAB,,,1
+1,2143,LVCC GFX PDUMP,sc run 46 3,300,Dut,sendCommand,0,,PASS sc run 46 3,PERTOS,xVT,A -> FA,,,1
+1,2144,Clock switcher off,clksw off,5,Dut,sendCommand,0,,PASS clksw off,PERTOS,xVT,AAB,,,1
+1,2145,pmgr mode 0x1FF1211,pmgr mode 0x1FF1211,5,Dut,sendCommand,0,,PASS pmgr mode 0x1FF1211,PERTOS,xVT,AAB,,,1
+1,2146,config ACC counter 0,acc counter config 0 0 14,5,Dut,sendCommand,0,,PASS acc counter config 0 0 14,PERTOS,xVT,AAB,,,1
+1,2147,config ACC counter 1,acc counter config 1 0 14,5,Dut,sendCommand,0,,PASS acc counter config 1 0 14,PERTOS,xVT,AAB,,,1
+1,2148,enable ACC counter 0,acc counter on 0,5,Dut,sendCommand,0,,PASS acc counter on 0,PERTOS,xVT,AAB,,,1
+1,2149,enable ACC counter 1,acc counter on 1,5,Dut,sendCommand,0,,PASS acc counter on 1,PERTOS,xVT,AAB,,,1
+1,2150,enable DPE/PPT,acc dpeppt on,5,Dut,sendCommand,0,,PASS acc dpeppt on,PERTOS,xVT,AAB,,,1
+1,2151,Dump DPE/PPT status and configuration,acc dpeppt status,5,Dut,sendCommand,0,,PASS acc dpeppt status,PERTOS,xVT,AAB,,,1
+1,2152,BBQ Config,bbq config fg 625 0 4 150 0 0 F C,5,Dut,sendCommand,0,,PASS bbq config fg 625 0 4 150 0 0 F C,PERTOS,xVT,AAB,,,1
+1,2153,BBQ Config Variant,bbq config 0xFF 500 150 5 100 24 6 F C,5,Dut,sendCommand,0,,PASS bbq config 0xFF 500 150 5 100 24 6 F C,PERTOS,xVT,AAB,,,1
+1,2154,enable BBQ,bbq on,5,Dut,sendCommand,0,,PASS bbq on,PERTOS,xVT,AAB,,,1
+1,2155,Clock switcher config - 7,clksw config pms 4 10000 -j 2500 0x1FF1211 0x1FF1211 0x2FF2222 0x3FF3222 0x4FF4233 0x5FF5233 0x6FF5233,5,Dut,sendCommand,0,,PASS clksw config pms 4 10000 -j 2500 0x1FF1211 0x1FF1211 0x2FF2222 0x3FF3222 0x4FF4233 0x5FF5233 0x6FF5233,PERTOS,xVT,AAB,,,1
+1,2156,Clock switcher on,clksw on,5,Dut,sendCommand,0,,PASS clksw on,PERTOS,xVT,AAB,,,1
+1,2157,Memcompare Test,sc run 20 25,300,Dut,sendCommand,0,,PASS sc run 20 25,PERTOS,xVT,A -> FA,,,1
+1,2158,ANE BBQ Test ,sc run 172 25,300,Dut,sendCommand,0,,PASS sc run 172 25,PERTOS,xVT,A -> FA,,,1
+1,2159,ANE Bonfire Test ,sc run 182 25,300,Dut,sendCommand,0,,PASS sc run 182 25,PERTOS,xVT,A -> FA,,,1
+1,2160,ANE + Memcompare Test,sc run 183 25,300,Dut,sendCommand,0,,PASS sc run 183 25,PERTOS,xVT,A -> FA,,,1
+1,2161,Clock switcher off,clksw off,5,Dut,sendCommand,0,,PASS clksw off,PERTOS,xVT,AAB,,,1
+1,2162,pmgr mode 0x73F5233,pmgr mode 0x73F5233,5,Dut,sendCommand,0,,PASS pmgr mode 0x73F5233,PERTOS,xVT,AAB,,,1
+1,2163,slave down PCORE3,slave down 7,5,Dut,sendCommand,0,,PASS slave down 7,PERTOS,xVT,AAB,,,1
+1,2164,slave down PCORE2,slave down 6,5,Dut,sendCommand,0,,PASS slave down 6,PERTOS,xVT,AAB,,,1
+1,2165,BBQ Config,bbq config 0x3F 500 150 5 100 24 6 F C,5,Dut,sendCommand,0,,PASS bbq config 0x3F 500 150 5 100 24 6 F C,PERTOS,xVT,AAB,,,1
+1,2166,Multi-core Memcmp Test,sc run 20 5 -coremask 0xC0,300,Dut,sendCommand,0,,PASS sc run 20 5 -coremask 0xC0,PERTOS,xVT,A -> FA,,,1
+1,2167,ANE BBQ Test ,sc run 172 5 -coremask 0xC0,300,Dut,sendCommand,0,,PASS sc run 172 5 -coremask 0xC0,PERTOS,xVT,A -> FA,,,1
+1,2168,ANE Bonfire Test ,sc run 182 5 -coremask 0xC0,300,Dut,sendCommand,0,,PASS sc run 182 5 -coremask 0xC0,PERTOS,xVT,A -> FA,,,1
+1,2169,ANE + Memcompare Test,sc run 183 5 -coremask 0xC0,300,Dut,sendCommand,0,,PASS sc run 183 5 -coremask 0xC0,PERTOS,xVT,A -> FA,,,1
+1,2170,slave down 5,slave down 5,5,Dut,sendCommand,0,,PASS slave down 5,PERTOS,xVT,AAB,,,1
+1,2171,BBQ Config Variant,bbq config 0x1F 500 150 5 100 24 6 F C,5,Dut,sendCommand,0,,PASS bbq config 0x1F 500 150 5 100 24 6 F C,PERTOS,xVT,AAB,,,1
+1,2172,pmgr mode 0x81F5233,pmgr mode 0x81F5233,5,Dut,sendCommand,0,,PASS pmgr mode 0x81F5233,PERTOS,xVT,AAB,,,1
+1,2173,Memcmp Test,sc run 20 5 -coremask 0xE0,300,Dut,sendCommand,0,,PASS sc run 20 5 -coremask 0xE0,PERTOS,xVT,A -> FA,,,1
+1,2174,ANE BBQ Test ,sc run 172 5 -coremask 0xE0,300,Dut,sendCommand,0,,PASS sc run 172 5 -coremask 0xE0,PERTOS,xVT,A -> FA,,,1
+1,2175,ANE Bonfire Test ,sc run 182 5 -coremask 0xE0,300,Dut,sendCommand,0,,PASS sc run 182 5 -coremask 0xE0,PERTOS,xVT,A -> FA,,,1
+1,2176,ANE + Memcompare Test,sc run 183 5 -coremask 0xE0,300,Dut,sendCommand,0,,PASS sc run 183 5 -coremask 0xE0,PERTOS,xVT,A -> FA,,,1
+1,2177,pmgr mode 0x91F5233,pmgr mode 0x91F5233,5,Dut,sendCommand,0,,PASS pmgr mode 0x91F5233,PERTOS,xVT,AAB,,,1
+1,2178,Multi-core Memcmp Test,sc run 20 5 -coremask 0xE0,300,Dut,sendCommand,0,,PASS sc run 20 5 -coremask 0xE0,PERTOS,xVT,A -> FA,,,1
+1,2179,disable BBQ,bbq off,5,Dut,sendCommand,0,,PASS bbq off,PERTOS,xVT,AAB,,,1
+1,2180,disable DPE/PPT,acc dpeppt off,5,Dut,sendCommand,0,,PASS acc dpeppt off,PERTOS,xVT,AAB,,,1
+1,2181,print current value of ACC counter 0,acc counter value 0,5,Dut,sendCommand,0,,PASS acc counter value 0,PERTOS,xVT,AAB,,,1
+1,2182,print current value of ACC counter 1,acc counter value 1,5,Dut,sendCommand,0,,PASS acc counter value 1,PERTOS,xVT,AAB,,,1
+1,2183,slave down PCORE1,slave up 5,5,Dut,sendCommand,0,,PASS slave up 5,PERTOS,xVT,AAB,,,1
+1,2184,slave down PCORE2,slave up 6,5,Dut,sendCommand,0,,PASS slave up 6,PERTOS,xVT,AAB,,,1
+1,2185,slave down PCORE3,slave up 7,5,Dut,sendCommand,0,,PASS slave up 7,PERTOS,xVT,AAB,,,1
+1,2186,dump ut cpu status,ut cpu status show,5,Dut,sendCommand,0,,PASS ut cpu status show,PERTOS,xVT,AAB,,,1
+1,2187,dump ut gpu status,ut gpu status show,5,Dut,sendCommand,0,,PASS ut gpu status show,PERTOS,xVT,AAB,,,1
+1,2188,show fs volumes,fs volumes,5,Dut,sendCommand,0,,PASS fs volumes,PERTOS,xVT,AAB,,,1
+1,2189,pmgr mode 0x1FF1211,pmgr mode 0x1FF1211,5,Dut,sendCommand,0,,PASS pmgr mode 0x1FF1211,PERTOS,xVT,AAB,,,1
+1,2190,RTOS_Setup_Boot,FIXTURESIGNAL_BOOT_RTOS,60,Rush,restore,0,,SEGPE>,PERTOS,xVT,AAB,,,1
+1,2191,switch to DRAM,xfer con,5,Dut,sendCommand,0,,PASS xfer con,PERTOS,xVT,AAB,,,1
+1,2192,pmgr mode 0x6FF4211,pmgr mode 0x6FF4211,5,Dut,sendCommand,0,,PASS pmgr mode 0x6FF4211,PERTOS,xVT,AAB,,,1
+1,2193,DDR protect region for FS,mmu ddr-protect fsx,5,Dut,sendCommand,0,,PASS mmu ddr-protect fsx,PERTOS,xVT,AAB,,,1
+1,2194,set up jitter,os jitter 10,5,Dut,sendCommand,0,,PASS os jitter 10,PERTOS,xVT,AAB,,,1
+1,2195,setup temp hysteresis settings,sense hyst 7 7 1,5,Dut,sendCommand,0,,PASS sense hyst 7 7 1,PERTOS,xVT,AAB,,,1
+1,2196,resume temp throttling thread,sense thread resume,5,Dut,sendCommand,0,,PASS sense thread resume,PERTOS,xVT,AAB,,,1
+1,2197,setup SOCHOT temp,sense sochot 120,5,Dut,sendCommand,0,,PASS sense sochot 120,PERTOS,xVT,AAB,,,1
+1,2198,setup TOOHOT temp,sense toohot 100 100 7,5,Dut,sendCommand,0,,PASS sense toohot 100 100 7,PERTOS,xVT,AAB,,,1
+1,2199,sense reset auto,sense reset auto,5,Dut,sendCommand,0,,PASS sense reset auto,PERTOS,xVT,AAB,,,1
+1,2200,Start CPU0,slave up cc0,5,Dut,sendCommand,0,,PASS slave up cc0,PERTOS,xVT,AAB,,,1
+1,2201,Start CPU1,slave up cc1,5,Dut,sendCommand,0,,PASS slave up cc1,PERTOS,xVT,AAB,,,1
+1,2202,Start CPU2,slave up cc2,5,Dut,sendCommand,0,,PASS slave up cc2,PERTOS,xVT,AAB,,,1
+1,2203,Start CPU3,slave up cc3,5,Dut,sendCommand,0,,PASS slave up cc3,PERTOS,xVT,AAB,,,1
+1,2204,Start CPU4,slave up cc4,5,Dut,sendCommand,0,,PASS slave up cc4,PERTOS,xVT,AAB,,,1
+1,2205,Start CPU5,slave up cc5,5,Dut,sendCommand,0,,PASS slave up cc5,PERTOS,xVT,AAB,,,1
+1,2206,Start CPU6,slave up cc6,5,Dut,sendCommand,0,,PASS slave up cc6,PERTOS,xVT,AAB,,,1
+1,2207,Start CPU7,slave up cc7,5,Dut,sendCommand,0,,PASS slave up cc7,PERTOS,xVT,AAB,,,1
+1,2208,S4E Eye scan test,sc run 129,300,Dut,sendCommand,0,,PASS sc run 129,PERTOS,xVT,A -> FA,,,1

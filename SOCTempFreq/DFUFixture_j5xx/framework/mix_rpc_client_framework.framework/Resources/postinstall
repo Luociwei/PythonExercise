@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Copy dependency (lizmq dylib) to /usr/local/lib.
+# This script is used as postinstall script when installing package
+# and is input of pkgbuild command in the last build phase.
+echo 'copying libzmq to /usr/local/lib/'
+touch ~/.libzmq_copied
+
+FRAMEWORK_INSTALLED="/Library/Frameworks/mix_rpc_client_framework.framework"
+FRAMEWORK_RESOURCE="$FRAMEWORK_INSTALLED/Resources/"
+TINYRPCX="$FRAMEWORK_RESOURCE/tinyrpcx/"
+PYTHON_VER=2.7
+PYTHON_SITE_PKG=/Library/Python/$PYTHON_VER/site-packages/
+INSTALL_PATH=$PYTHON_SITE_PKG/mix/lynx/rpc
+mkdir -p $INSTALL_PATH
+touch $PYTHON_SITE_PKG/mix/__init__.py
+touch $PYTHON_SITE_PKG/mix/lynx/__init__.py
+
+echo 'installing zmq C library libzmq dylib to /usr/local/lib/'
+cp -rf $FRAMEWORK_RESOURCE/libzmq*.dylib /usr/local/lib/
+
+echo 'installing tinyrpcx package to MacOS default site-packages folder: '$INSTALL_PATH
+cp -rf $TINYRPCX $INSTALL_PATH/
+
+echo 'installing ujson, zmq and concurrent.futures as RPC client dependencies to MacOS default site-packages folder: '$INSTALL_PATH
+cp -rf $TINYRPCX/dependencies/* $PYTHON_SITE_PKG/
+
+# remove old framework from AppleInternel if there is;
+# create symlink for /AppleInternal so previous software could still access the framework from
+# /AppleInternal/Library/Frameworks/
+INTERNAL_INSTALL_PATH=/AppleInternal/Library/Frameworks/mix_rpc_client_framework.framework
+if [[ -d /AppleInternal ]]
+then
+    if [[ -e $INTERNAL_INSTALL_PATH ]]
+    then
+        rm -rf $INTERNAL_INSTALL_PATH
+    fi
+    ln -sf /Library/Frameworks/mix_rpc_client_framework.framework  /AppleInternal/Library/Frameworks/mix_rpc_client_framework.framework
+fi
+
