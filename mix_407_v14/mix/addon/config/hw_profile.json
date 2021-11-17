@@ -1,0 +1,549 @@
+{
+  "shared_devices": {
+    "i2c_0" :{ "class":"I2C",  "dev_name":"/dev/i2c-0" },
+    "i2c_1" :{ "class":"I2C",  "dev_name":"/dev/i2c-1" },
+    "i2c_2" :{ "class":"I2C",  "dev_name":"/dev/i2c-2" },
+    "i2c_3" :{ "class":"I2C",  "dev_name":"/dev/i2c-3" },
+    "i2c_4" :{ "class":"I2C",  "dev_name":"/dev/i2c-4" },
+    "i2c_5" :{ "class":"I2C",  "dev_name":"/dev/i2c-5" },
+    "i2c_6" :{ "class":"I2C",  "dev_name":"/dev/i2c-6" },
+    "i2c_7" :{ "class":"I2C",  "dev_name":"/dev/i2c-7" },
+    "i2c_8" :{ "class":"I2C",  "dev_name":"/dev/i2c-8" },
+
+
+    "gpio_994": {
+            "class": "GPIO",
+            "default_dir": "input",
+            "pin_id":994
+    },
+    "gpio_995": {
+            "class": "GPIO",
+            "default_dir": "input",
+            "pin_id":995
+    },
+    "gpio_992": {
+            "class": "GPIO",
+            "default_dir": "output",
+            "pin_id":992
+    },
+    "gpio_993": {
+            "class": "GPIO",
+            "default_dir": "output",
+            "pin_id":993
+    },
+    "gpio_996": {
+            "class": "GPIO",
+            "default_dir": "output",
+            "pin_id":996
+    },
+    "gpio_997": {
+            "class": "GPIO",
+            "default_dir": "output",
+            "pin_id":997
+    },
+    "gpio_998": {
+            "class": "GPIO",
+            "default_dir": "output",
+            "pin_id":998
+    },
+    "gpio_999": {
+            "class": "GPIO",
+            "default_dir": "output",
+            "pin_id":999
+    },
+
+    "gpio_1005": {
+            "class": "GPIO",
+            "default_dir": "output",
+            "pin_id":1005
+    },
+    "gpio_1006": {
+            "class": "GPIO",
+            "default_dir": "output",
+            "pin_id":1006
+    },
+    "gpio_1007": {
+            "class": "GPIO",
+            "default_dir": "output",
+            "pin_id":1007
+    },
+    "gpio_1008": {
+            "class": "GPIO",
+            "default_dir": "output",
+            "pin_id":1008
+    },
+    "fan_signal_meter": { 
+                    "class": "MIXSignalMeterSG",
+                    "axi4_bus":{
+                    "class": "AXI4LiteBus",
+                    "dev_name": "/dev/MIX_SignalMeter_SG_0",
+                    "reg_size": 256
+            }
+    },
+
+    "io_table":{
+    "class": "IOTable",
+    "pin_map": {"io_exp1":[[1,16]],
+                "io_exp2":[[17,32]],
+                "io_exp3":[[33,48]],
+                "io_exp4":[[49,64]],
+                "io_exp5":[[65,80]],
+                "io_exp6":[[81,96]]
+
+                 },
+        "profile": "/mix/addon/driver/project/io_map.json"
+    },
+    "sib_eeprom": {
+     "class": "CAT24C64",
+     "dev_addr": 80,
+     "i2c_bus": "@i2c_0"
+    },
+    "io_exp4": {
+        "class": "CAT9555",
+        "dev_addr": 32,
+        "i2c_bus": "@i2c_0"
+    },
+    "io_exp5": {
+        "class": "CAT9555",
+        "dev_addr": 33,
+        "i2c_bus": "@i2c_0"
+    },
+     "io_exp6": {
+     "class": "CAT9555",
+     "dev_addr": 34,
+     "i2c_bus": "@i2c_0"
+    }
+
+  },
+
+"duts": {
+
+        "dut0": {
+            "xavier": {
+                    "class": "Xavier_SC",
+                    "log_folder": "/mix/addon/dut_firmware/ch1"
+                 },
+              "uart": {
+                    "class":"UART",
+                    "dev_name":"/dev/ttyS2"
+                },
+
+                "uart_dfu": {
+                    "class": "UART2NET_UUT",
+                    "dev_name": "/dev/ttyS2",
+                    "port":7601
+                },
+
+                "uart_SoC":{
+                    "class": "UartService",
+                    "data_path_manager": "@datapath_manager",
+                    "uart_service":{
+                        "class": "UART",
+                        "dev_name": "/dev/ttyS2",
+                        "baudrate": 115200,
+                        "data_bits": 8,
+                        "parity": "none",
+                        "stop_bits":1
+                        }
+                },
+
+
+                "io_exp1": {
+                    "class": "CAT9555",
+                    "dev_addr": 32,
+                    "i2c_bus": "@i2c_1"
+                },
+                "io_exp2": {
+                    "class": "CAT9555",
+                    "dev_addr": 33,
+                    "i2c_bus": "@i2c_1"
+                },
+                "io_exp3": {
+                    "class": "CAT9555",
+                    "dev_addr": 34,
+                    "i2c_bus": "@i2c_1"
+                },
+
+                "batt_dac": {
+                    "class":"AD5602",
+                    "dev_addr":15,
+                    "i2c_bus":"@i2c_5",
+                    "mvref":5000
+                },
+
+                "ltc2309": {
+                    "class":"LTC2309",
+                    "dev_addr":8,
+                    "mode":"SINGLE_ENDED_UNIP",
+                    "bus_rate":400000,
+                    "i2c_bus":"@i2c_5"
+                },
+                "mcp47fe":{
+                    "class":"MCP47FE",
+                    "dev_addr":96,
+                    "i2c_bus":"@i2c_5",
+                    "ref_mode":"VREF_VDD"
+                },
+
+                "ocp_status": {
+                    "class": "GPIO",
+                    "default_dir": "input",
+                    "pin_id":1000
+                },
+
+                "fan_pwm_output": {
+                    "class": "MIXSignalSourceSG",
+                    "axi4_bus":{
+                        "class": "AXI4LiteBus",
+                        "dev_name": "/dev/MIX_SignalSource_SG_0",
+                        "reg_size": 1024
+                    }
+                },
+                "fixture":{
+                "class":"FixtureAction",
+                "start_left_key":"@gpio_994",
+                "start_right_key":"@gpio_996",
+                "reset_key":"@gpio_995",
+                "io_exp":    "@io_exp6"
+                },
+                "led":{
+                  "class":"LED",
+                  "ioexp":"@io_exp4",
+                  "slot" :"slot1"
+                },
+                "site": 0,
+                "server":{
+                "log_folder_path": "/var/log/rpc_log",
+                "endpoint": "tcp://*:7801",
+                "log_level": "INFO"
+
+                },
+                "fwdl1":{
+                       "class": "SmartGiantFWDL",
+                       "slot_id":1,
+                       "spi": "/dev/MIX_QSPI_SG_0",
+                       "spi_freq":10000000,
+                       "spi_mode":"MODE0"
+
+                },
+    },
+    
+    "dut1": {
+            "xavier": {
+                    "class": "Xavier_SC",
+                    "log_folder": "/mix/addon/dut_firmware/ch2"
+                 },
+
+              "uart": {
+                    "class":"UART",
+                    "dev_name":"/dev/ttyS3"
+                },
+                "uart_dfu": {
+                    "class": "UART2NET_UUT",
+                    "dev_name": "/dev/ttyS3",
+                    "port":7602
+                },
+
+
+                "uart_SoC":{
+                    "class": "UartService",
+                    "data_path_manager": "@datapath_manager",
+                    "uart_service":{
+                        "class": "UART",
+                        "dev_name": "/dev/ttyS3",
+                        "baudrate": 115200,
+                        "data_bits": 8,
+                        "parity": "none",
+                        "stop_bits":1
+                    }
+                },
+                "io_exp1": {
+                    "class": "CAT9555",
+                    "dev_addr": 32,
+                    "i2c_bus": "@i2c_2"
+                },
+                    "io_exp2": {
+                    "class": "CAT9555",
+                    "dev_addr": 33,
+                    "i2c_bus": "@i2c_2"
+                },
+                "io_exp3": {
+                    "class": "CAT9555",
+                    "dev_addr": 34,
+                    "i2c_bus": "@i2c_2"
+                },
+
+                "batt_dac": {
+                    "class":"AD5602",
+                    "dev_addr":15,
+                    "i2c_bus":"@i2c_6",
+                    "mvref":5000
+                },
+
+                "ltc2309": {
+                    "class":"LTC2309",
+                    "dev_addr":8,
+                    "mode":"SINGLE_ENDED_UNIP",
+                    "bus_rate":400000,
+                    "i2c_bus":"@i2c_6"
+                },
+                "mcp47fe":{
+                    "class":"MCP47FE",
+                    "dev_addr":96,
+                    "i2c_bus":"@i2c_6",
+                    "ref_mode":"VREF_VDD"
+                },
+                "ocp_status": {
+                    "class": "GPIO",
+                    "default_dir": "input",
+                    "pin_id":1001
+                },
+
+                "fan_pwm_output": {
+                    "class": "MIXSignalSourceSG",
+                    "axi4_bus":{
+                        "class": "AXI4LiteBus",
+                        "dev_name": "/dev/MIX_SignalSource_SG_0",
+                        "reg_size": 1024
+                    }
+                },
+                "fixture":{
+                "class":"FixtureAction",
+                "start_key":"@gpio_994",
+                "reset_key":"@gpio_995",
+                "io_exp":    "@io_exp6"
+                },
+                "led":{
+                  "class":"LED",
+                  "ioexp":"@io_exp4",
+                  "slot" :"slot2"
+                },
+                "fwdl1":{
+                 "class": "SmartGiantFWDL",
+                 "slot_id":2,
+                 "spi": "/dev/MIX_QSPI_SG_1",
+                 "spi_freq":10000000,
+                 "spi_mode":"MODE0"
+
+                },
+                "site": 1,
+                "server":{
+                "log_folder_path": "/var/log/rpc_log",
+                "endpoint": "tcp://*:7802",
+                "log_level": "INFO"
+
+                },
+    },
+
+    "dut2": {
+            "xavier": {
+                    "class": "Xavier_SC",
+                    "log_folder": "/mix/addon/dut_firmware/ch3"
+                 },
+
+              "uart": {
+                    "class":"UART",
+                    "dev_name":"/dev/ttyS4"
+                },
+                "uart_dfu": {
+                    "class": "UART2NET_UUT",
+                    "dev_name": "/dev/ttyS4",
+                    "port":7605
+                },
+
+                "uart_SoC":{
+                    "class": "UartService",
+                    "data_path_manager": "@datapath_manager",
+                    "uart_service":{
+                        "class": "UART",
+                        "dev_name": "/dev/ttyS4",
+                        "baudrate": 115200,
+                        "data_bits": 8,
+                        "parity": "none",
+                        "stop_bits":1
+                      }
+                  },
+                "io_exp1": {
+                    "class": "CAT9555",
+                    "dev_addr": 32,
+                    "i2c_bus": "@i2c_3"
+                },
+                    "io_exp2": {
+                    "class": "CAT9555",
+                    "dev_addr": 33,
+                    "i2c_bus": "@i2c_3"
+                },
+                    "io_exp3": {
+                    "class": "CAT9555",
+                    "dev_addr": 34,
+                    "i2c_bus": "@i2c_3"
+                },
+
+                "batt_dac":{
+                    "class":"AD5602",
+                    "dev_addr":15,
+                    "i2c_bus":"@i2c_7",
+                    "mvref":5000
+                },
+
+
+                "mcp47fe":{
+                    "class":"MCP47FE",
+                    "dev_addr":96,
+                    "i2c_bus":"@i2c_7",
+                    "ref_mode":"VREF_VDD"
+                },
+                "ltc2309": {
+                    "class":"LTC2309",
+                    "dev_addr":8,
+                    "mode":"SINGLE_ENDED_UNIP",
+                    "bus_rate":400000,
+                    "i2c_bus":"@i2c_7"
+                },
+                "ocp_status": {
+                    "class": "GPIO",
+                    "default_dir": "input",
+                    "pin_id":1002
+                },
+
+
+
+                "fan_pwm_output": {
+                    "class": "MIXSignalSourceSG",
+                    "axi4_bus":{
+                        "class": "AXI4LiteBus",
+                        "dev_name": "/dev/MIX_SignalSource_SG_0",
+                        "reg_size": 1024
+                    }
+                },
+                "fixture":{
+                "class":"FixtureAction",
+                "start_key":"@gpio_994",
+                "reset_key":"@gpio_995",
+                "io_exp":    "@io_exp6"
+                },
+                "led":{
+                  "class":"LED",
+                  "ioexp":"@io_exp5",
+                  "slot" :"slot3"
+                },
+                "fwdl1":{
+                 "class": "SmartGiantFWDL",
+                 "slot_id":3,
+                 "spi": "/dev/MIX_QSPI_SG_2",
+                 "spi_freq":10000000,
+                 "spi_mode":"MODE0"
+
+                },
+        "site": 2,
+        "port": 7803
+    },
+
+    "dut3": {
+            "xavier": {
+                    "class": "Xavier_SC",
+                    "log_folder": "/mix/addon/dut_firmware/ch4"
+                 },
+
+                "uart": {
+                    "class":"UART",
+                    "dev_name":"/dev/ttyS5"
+                },
+                "uart_dfu": {
+                    "class": "UART2NET_UUT",
+                    "dev_name": "/dev/ttyS5",
+                    "port":7604
+                },
+                
+                "uart_SoC":{
+                    "class": "UartService",
+                    "data_path_manager": "@datapath_manager",
+                    "uart_service":{
+                        "class": "UART",
+                        "dev_name": "/dev/ttyS5",
+                        "baudrate": 115200,
+                        "data_bits": 8,
+                        "parity": "none",
+                        "stop_bits":1
+                    }
+                },
+                "io_exp1": {
+                    "class": "CAT9555",
+                    "dev_addr": 32,
+                    "i2c_bus": "@i2c_4"
+                },
+                    "io_exp2": {
+                    "class": "CAT9555",
+                    "dev_addr": 33,
+                    "i2c_bus": "@i2c_4"
+                },
+                    "io_exp3": {
+                    "class": "CAT9555",
+                    "dev_addr": 34,
+                    "i2c_bus": "@i2c_4"
+                },
+
+                "batt_dac":{
+                    "class":"AD5602",
+                    "dev_addr":15,
+                    "i2c_bus":"@i2c_8",
+                    "mvref":5000
+                },
+
+
+                "mcp47fe":{
+                    "class":"MCP47FE",
+                    "dev_addr":96,
+                    "i2c_bus":"@i2c_8",
+                    "ref_mode":"VREF_VDD"
+                },
+
+                "ltc2309": {
+                    "class":"LTC2309",
+                    "dev_addr":8,
+                    "mode":"SINGLE_ENDED_UNIP",
+                    "bus_rate":400000,
+                    "i2c_bus":"@i2c_8" 
+                },
+
+                "ocp_status": {
+                    "class": "GPIO",
+                    "default_dir": "input",
+                    "pin_id":1003
+                },
+
+                "fan_pwm_output": {
+                    "class": "MIXSignalSourceSG",
+                    "axi4_bus":{
+                        "class": "AXI4LiteBus",
+                        "dev_name": "/dev/MIX_SignalSource_SG_0",
+                        "reg_size": 1024
+                    }
+                },
+                "fixture":{
+                "class":"FixtureAction",
+                "start_key":"@gpio_994",
+                "reset_key":"@gpio_995",
+                "io_exp":    "@io_exp6"
+                },
+                "led":{
+                  "class":"LED",
+                  "ioexp":"@io_exp5",
+                  "slot" :"slot4"
+                },
+                "fwdl1":{
+                 "class": "SmartGiantFWDL",
+                 "slot_id":4,
+                 "spi": "/dev/MIX_QSPI_SG_3",
+                 "spi_freq":10000000,
+                 "spi_mode":"MODE0"
+
+                },
+      "site": 3,
+      "port": 7804
+    }
+  },
+  "network": {
+    "default_ip": "169.254.1.32"
+  }
+}

@@ -1,3 +1,0 @@
-5
-d.csv
-path.txt

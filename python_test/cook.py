@@ -9,7 +9,7 @@ class SweetPotato():
         self.cook_time =0
         self.cook_state = '生的'
         self.condiments = []
-
+        self.condiments_str = ''
 
     def cook(self,time):
 
@@ -29,10 +29,17 @@ class SweetPotato():
     def add_condiments(self,condiment):
         self.condiments.append(condiment)
 
+    def get_condiments(self):
+        
+        for str in self.condiments:
+            self.condiments_str = self.condiments_str + str + ','
 
 
     def __str__(self):
-        return f'这个地瓜的被烤过的时间是{self.cook_time},状态:{self.cook_state},调料:{self.condiments}'
+        print(self.condiments)
+        return '这个地瓜的被烤过的时间是'+str(self.cook_time)+',状态:'+str(self.cook_state)+'调料:'+self.condiments_str
+        # return '这个地瓜的被烤过的时间是%d,状态:%s,调料:%s'%(self.cook_time,self.cook_state,self.condiments)
+        # return f'这个地瓜的被烤过的时间是{self.cook_time},状态:{self.cook_state},调料:{self.condiments}'
 
 
 

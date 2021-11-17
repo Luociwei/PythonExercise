@@ -1,4 +1,0 @@
-5
-Screen Shot 2020-10-24 at 2.50.59 PM.png
-d.csv
-path.txt

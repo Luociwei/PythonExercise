@@ -1,0 +1,3 @@
+https://confluence.sd.apple.com/display/SMT/MIX+Directory+Structure+Proposal
+
+This will move to /mix/driver/apple/bus/swd.py

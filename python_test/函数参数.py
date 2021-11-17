@@ -6,7 +6,7 @@
 
 
 def user_info(name,age,gender):
-    print(f'您的名字是{name},年龄是{age},性别是{gender}')
+    print('您的名字是%s,年龄是%s,性别是%s'%(name,age,gender))
 
 
 #关键字参数
@@ -16,7 +16,7 @@ user_info('louis',gender='boy',age = 33)
 
 #缺省参数
 def user_info1(name='TOM',age=23,gender='BOY'):
-    print(f'您的名字是{name},年龄是{age},性别是{gender}')
+    print('您的名字是%s,年龄是%s,性别是'%(name,age,gender))
 
 user_info1()
 user_info1('jim')

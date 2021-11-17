@@ -29,18 +29,18 @@ class Person(object):
 
 
 Dog.tooth =20
-print(f'Dog tooth:{Dog.tooth}')
+# print(f'Dog tooth:{Dog.tooth}')
 
 ad = ArmyDog()
 ArmyDog.tooth =50
-print(f'ad tooth:{ad.tooth}')
+# print(f'ad tooth:{ad.tooth}')
 ad.tooth = 30
-print(f'Dog tooth:{Dog.tooth}')
-print(f'ad tooth:{ad.tooth}')
+# print(f'Dog tooth:{Dog.tooth}')
+# print(f'ad tooth:{ad.tooth}')
 
 
 dd = DrugDog()
-print(f'dd tooth:{dd.tooth}')
+print('dd tooth:%s'%(dd.tooth))
 
 daqiu = Person()
 daqiu.work_with_dog(ad)

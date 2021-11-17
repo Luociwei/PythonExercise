@@ -1,0 +1,32 @@
+{
+    "shared_devices":{
+        "datapath_manager": {
+            "class": "DataPathManager",
+            "max_pipelines": 100
+        }
+    },
+    "per_dut": {
+        "rpc_server_endpoint": "tcp://*:{}",
+        "rpc_server_port_base": 7801,
+        "test_function_path": "/mix/addon/test_function",
+        "file_transfer":{
+            "class": "MIXFileTransfer",
+            "data_path_manager": "@datapath_manager",
+            "whitelist": "/mix/lynx/config/file_transfer_whitelist.conf"
+        },
+        "server":{
+            "log_folder_path": "/var/log/rpc_log",
+            "log_level": "INFO"
+        }
+    },
+    "network": {
+        "base_ip": "169.254.1.32",
+        "ip_addr_file": "/boot/ip_addr.conf",
+        "default_ip": "169.254.1.254"
+    },
+    "mgmt_server": {
+        "port": 7800,
+        "log_folder_path": "/var/log/rpc_log",
+        "log_level": "INFO"
+    }
+}

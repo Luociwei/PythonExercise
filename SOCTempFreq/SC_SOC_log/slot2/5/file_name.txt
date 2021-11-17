@@ -1,2 +1,0 @@
-DLX03950038PPX71P_rawuart.log
-file_name.txt
