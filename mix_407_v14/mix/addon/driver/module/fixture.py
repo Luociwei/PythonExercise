@@ -74,16 +74,16 @@ class FixtureAction(object):
 
     def get_key_status(self):
         left_ret = self.start_left_key.get_level()
-        rigth_ret = self.start_right_key.get_level()
+        right_ret = self.start_right_key.get_level()
         retreset = self.reset_key.get_level()
-        result = str(left_ret)+str(rigth_ret)+str(retreset)
+        result = str(left_ret)+str(right_ret)+str(retreset)
         return result
 
     def get_start_left_key_status(self):
         ret = self.start_left_key.get_level()
         return ret
 
-    def get_start_rigth_key_status(self):
+    def get_start_right_key_status(self):
         ret = self.start_right_key.get_level()
         return ret
 
@@ -93,62 +93,93 @@ class FixtureAction(object):
 
     def In(self,timeout=4000):
         self._set('in')
-        # return PASS_MASK
+        return PASS_MASK
 
     def Out(self,timeout=4000):
         self._set('out')
-        # return PASS_MASK
+        return PASS_MASK
 
     def Up(self,timeout=4000):
         status = self.get_status()
         self._set('up')
-        # return PASS_MASK
+        return PASS_MASK
 
     def Down(self,timeout=4000):
         status = self.get_status()
         self._set('down')
-        # return PASS_MASK
+        return PASS_MASK
 
     def Idle(self,timeout=4000):
         self._set('idle')
         return PASS_MASK
 
-    def release(self,timeout=5000):
+    def release(self,timeout=6000):
         status = self.get_status()
-        if status == 'down':
-            self.Idle(timeout)
-        while True:
-            time.sleep(0.08)
-            status = self.get_status()          
-            if status=='in':
-                time.sleep(1)
-                self.Out(timeout)
-                break
-            # time.sleep(0.3)
-        return PASS_MASK
-
-    def press(self,timeout=5000):
-        status = self.get_status()
-        if status == 'down':
+        if status == 'out':
             return PASS_MASK
-        self.In(timeout)
-        # time.sleep(0.5)
-        while self.control:
-            time.sleep(0.08)
-            status = self.get_status()
-            if status == 'in':
-                time.sleep(0.8)
-                break
-        self.Down(timeout)
+        elif status == 'idleup' or status == 'in':
+            self.Out(timeout)
+            time.sleep(0.2)
+            # return PASS_MASK 
+
+        elif status == 'down' or status == 'idle':
+            self.Idle(timeout)
+            time.sleep(0.2)
 
         start_time= time.time()
         while True:
-            time.sleep(0.08)
-            status = self.get_status()
-            if time.time() - start_time >= 6:
-                break
+            
+            # status = self.get_status()
+            if self.get_status() == 'out':
+                time.sleep(0.8)
+                break          
+            elif self.get_status() =='in':
+                time.sleep(0.8)
+                self.Out(timeout)
+                
+                # break
+            if time.time() - start_time >= 10:
+                return FAIL_MASK
+                # break
 
+            time.sleep(0.2)
+        return PASS_MASK
+
+    def press(self,timeout=6000):
+        status = self.get_status()
+        if status == 'down':
+            return PASS_MASK
+        elif status == 'idle' or status == 'in': 
+            self.Down(timeout)
+            time.sleep(0.2)   
+        elif status == 'idleup' or status == 'out':
+            self.In(timeout)
+            time.sleep(0.2)
+            # return PASS_MASK 
+        # time.sleep(0.5)
+        # while self.control:
+        #     time.sleep(0.08)
+        #     status = self.get_status()
+        #     if status == 'in':
+        #         time.sleep(0.8)
+        #         break
+
+        start_time= time.time()
+        while True:
+            
+            status = self.get_status()
             if status == 'down':
+                time.sleep(0.8)
                 break
+            elif self.get_status() =='in':
+                time.sleep(0.8)
+                self.Down(timeout)
+                
+                # break
+            if time.time() - start_time >= 10:
+                return FAIL_MASK
+
+            time.sleep(0.2)    
+
                 
         return PASS_MASK

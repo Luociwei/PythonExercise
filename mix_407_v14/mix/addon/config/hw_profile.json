@@ -33,7 +33,7 @@
     },
     "gpio_996": {
             "class": "GPIO",
-            "default_dir": "output",
+            "default_dir": "input",
             "pin_id":996
     },
     "gpio_997": {
@@ -309,7 +309,8 @@
                 },
                 "fixture":{
                 "class":"FixtureAction",
-                "start_key":"@gpio_994",
+                "start_left_key":"@gpio_994",
+                "start_right_key":"@gpio_996",
                 "reset_key":"@gpio_995",
                 "io_exp":    "@io_exp6"
                 },
@@ -418,7 +419,8 @@
                 },
                 "fixture":{
                 "class":"FixtureAction",
-                "start_key":"@gpio_994",
+                "start_left_key":"@gpio_994",
+                "start_right_key":"@gpio_996",
                 "reset_key":"@gpio_995",
                 "io_exp":    "@io_exp6"
                 },
@@ -522,7 +524,8 @@
                 },
                 "fixture":{
                 "class":"FixtureAction",
-                "start_key":"@gpio_994",
+                "start_left_key":"@gpio_994",
+                "start_right_key":"@gpio_996",
                 "reset_key":"@gpio_995",
                 "io_exp":    "@io_exp6"
                 },
